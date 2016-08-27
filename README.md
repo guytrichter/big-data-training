@@ -1,5 +1,5 @@
 # big-data-training
-haddop training
+hadoop training
 
 Build a "master dataset" associated with the lambda archuitecture.  
 
