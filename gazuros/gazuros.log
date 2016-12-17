@@ -1,0 +1,82 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v1.4.2.RELEASE)
+
+2016-12-17 20:21:25.114  INFO 21402 --- [           main] com.gazuros.inventory.Application        : Starting Application v1.0-SNAPSHOT on guy-ThinkPad-Edge-E540 with PID 21402 (/home/guy/git/training/big-data-training/gazuros/target/inventory-1.0-SNAPSHOT.jar started by guy in /home/guy/git/training/big-data-training/gazuros)
+2016-12-17 20:21:25.118  INFO 21402 --- [           main] com.gazuros.inventory.Application        : No active profile set, falling back to default profiles: default
+2016-12-17 20:21:25.187  INFO 21402 --- [           main] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@4459eb14: startup date [Sat Dec 17 20:21:25 IST 2016]; root of context hierarchy
+2016-12-17 20:21:26.454  INFO 21402 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [class org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$3880b4a3] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2016-12-17 20:21:26.915  INFO 21402 --- [           main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 8080 (http)
+2016-12-17 20:21:26.932  INFO 21402 --- [           main] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2016-12-17 20:21:26.933  INFO 21402 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.6
+2016-12-17 20:21:27.009  INFO 21402 --- [ost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2016-12-17 20:21:27.009  INFO 21402 --- [ost-startStop-1] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1825 ms
+2016-12-17 20:21:27.144  INFO 21402 --- [ost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'dispatcherServlet' to [/]
+2016-12-17 20:21:27.147  INFO 21402 --- [ost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2016-12-17 20:21:27.148  INFO 21402 --- [ost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2016-12-17 20:21:27.148  INFO 21402 --- [ost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2016-12-17 20:21:27.148  INFO 21402 --- [ost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2016-12-17 20:21:27.453  INFO 21402 --- [           main] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2016-12-17 20:21:27.469  INFO 21402 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2016-12-17 20:21:27.572  INFO 21402 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.0.0.CR3}
+2016-12-17 20:21:27.573  INFO 21402 --- [           main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2016-12-17 20:21:27.576  INFO 21402 --- [           main] org.hibernate.cfg.Environment            : HHH000021: Bytecode provider name : javassist
+2016-12-17 20:21:27.638  INFO 21402 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.0.Final}
+2016-12-17 20:21:28.077  INFO 21402 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2016-12-17 20:21:28.575  INFO 21402 --- [           main] org.hibernate.tool.hbm2ddl.SchemaUpdate  : HHH000228: Running hbm2ddl schema update
+2016-12-17 20:21:28.642  INFO 21402 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2016-12-17 20:21:29.093  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerAdapter : Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@4459eb14: startup date [Sat Dec 17 20:21:25 IST 2016]; root of context hierarchy
+2016-12-17 20:21:29.159  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/health]}" onto public boolean com.gazuros.inventory.controller.RestController.health()
+2016-12-17 20:21:29.160  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/orders/update/{orderId}],methods=[PUT]}" onto public java.lang.Long com.gazuros.inventory.controller.OrderController.updateOrder(long,java.lang.String)
+2016-12-17 20:21:29.161  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/orders/getOrders],methods=[GET]}" onto public java.util.List<com.gazuros.inventory.model.Order> com.gazuros.inventory.controller.OrderController.getOrders()
+2016-12-17 20:21:29.161  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/orders/getOrder/{orderId}],methods=[GET]}" onto public com.gazuros.inventory.model.Order com.gazuros.inventory.controller.OrderController.getOrder(long)
+2016-12-17 20:21:29.161  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/orders/getOrdersByStatus],methods=[GET]}" onto public java.util.List<com.gazuros.inventory.model.Order> com.gazuros.inventory.controller.OrderController.getOrdersByStatus(java.lang.String)
+2016-12-17 20:21:29.161  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/orders/getOrdersByProductId],methods=[GET]}" onto public java.util.List<com.gazuros.inventory.model.Order> com.gazuros.inventory.controller.OrderController.getOrdersByProductId(long)
+2016-12-17 20:21:29.161  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/orders/getOrdersByStatusAndProductId],methods=[GET]}" onto public java.util.List<com.gazuros.inventory.model.Order> com.gazuros.inventory.controller.OrderController.getOrdersByStatusAndProductId(java.lang.String,long)
+2016-12-17 20:21:29.161  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/orders/getOrdersByTime],methods=[GET]}" onto public java.util.List<com.gazuros.inventory.model.Order> com.gazuros.inventory.controller.OrderController.getOrdersNumDaysBack(int)
+2016-12-17 20:21:29.161  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/orders/create],methods=[POST]}" onto public java.lang.Long com.gazuros.inventory.controller.OrderController.createNewOrder(com.gazuros.inventory.model.Order)
+2016-12-17 20:21:29.162  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/products/getProducts],methods=[GET]}" onto public java.util.List<com.gazuros.inventory.model.Product> com.gazuros.inventory.controller.ProductController.getProducts()
+2016-12-17 20:21:29.162  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/products/create],methods=[POST]}" onto public java.lang.Long com.gazuros.inventory.controller.ProductController.createNewProduct(com.gazuros.inventory.model.Product)
+2016-12-17 20:21:29.162  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/products/getProduct/{productId}],methods=[GET]}" onto public com.gazuros.inventory.model.Product com.gazuros.inventory.controller.ProductController.getProduct(long)
+2016-12-17 20:21:29.166  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2016-12-17 20:21:29.166  INFO 21402 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2016-12-17 20:21:29.192  INFO 21402 --- [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2016-12-17 20:21:29.192  INFO 21402 --- [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2016-12-17 20:21:29.228  INFO 21402 --- [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2016-12-17 20:21:29.434  INFO 21402 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2016-12-17 20:21:29.478  INFO 21402 --- [           main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 8080 (http)
+2016-12-17 20:21:29.482  INFO 21402 --- [           main] com.gazuros.inventory.Application        : Started Application in 4.864 seconds (JVM running for 5.211)
+2016-12-17 20:21:47.035  INFO 21402 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring FrameworkServlet 'dispatcherServlet'
+2016-12-17 20:21:47.035  INFO 21402 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization started
+2016-12-17 20:21:47.050  INFO 21402 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization completed in 15 ms
+Received product: Product{id=0, name='pot', price=13.5, provider='china-something', description='pots used for planting'}
+Hibernate: insert into product (description, name, price, provider) values (?, ?, ?, ?)
+FromDB: Product{id=3, name='pot', price=13.5, provider='china-something', description='pots used for planting'}
+getProducts
+2016-12-17 20:22:18.674  INFO 21402 --- [nio-8080-exec-2] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+Hibernate: select product0_.product_id as product_1_1_, product0_.description as descript2_1_, product0_.name as name3_1_, product0_.price as price4_1_, product0_.provider as provider5_1_ from product product0_
+FromDB: [Product{id=1, name='pot', price=13.2, provider='china-something', description='pots used for planting'}, Product{id=2, name='pot', price=13.2, provider='china-something', description='pots used for planting'}, Product{id=3, name='pot', price=13.5, provider='china-something', description='pots used for planting'}]
+getProduct for productId: 3
+Hibernate: select product0_.product_id as product_1_1_0_, product0_.description as descript2_1_0_, product0_.name as name3_1_0_, product0_.price as price4_1_0_, product0_.provider as provider5_1_0_ from product product0_ where product0_.product_id=?
+FromDB: Product{id=3, name='pot', price=13.5, provider='china-something', description='pots used for planting'}
+Received order: Order{id=0, productId=3, dateTimestamp=1481999059190, dateStr='2016-12-17T18:24:19.190Z', amount=5000, status='BACK_ORDER', shippingPrice=0.0, destination='NY'}
+Hibernate: insert into `order` (amount, date_str, date_timestamp, destination, product_id, shipping_price, status) values (?, ?, ?, ?, ?, ?, ?)
+FromDB: Order{id=3, productId=3, dateTimestamp=1481999059190, dateStr='2016-12-17T18:24:19.190Z', amount=5000, status='BACK_ORDER', shippingPrice=0.0, destination='NY'}
+Received update for order: 3 with status: IN_STOCK
+Hibernate: select order0_.order_id as order_id1_0_0_, order0_.amount as amount2_0_0_, order0_.date_str as date_str3_0_0_, order0_.date_timestamp as date_tim4_0_0_, order0_.destination as destinat5_0_0_, order0_.product_id as product_6_0_0_, order0_.shipping_price as shipping7_0_0_, order0_.status as status8_0_0_ from `order` order0_ where order0_.order_id=?
+FromDB: Order{id=3, productId=3, dateTimestamp=1481999059190, dateStr='2016-12-17T18:24:19.190Z', amount=5000, status='BACK_ORDER', shippingPrice=0.0, destination='NY'}
+Hibernate: update `order` set amount=?, date_str=?, date_timestamp=?, destination=?, product_id=?, shipping_price=?, status=? where order_id=?
+UpdatedOrder: Order{id=3, productId=3, dateTimestamp=1481999094767, dateStr='2016-12-17T18:24:54.767Z', amount=5000, status='IN_STOCK', shippingPrice=0.0, destination='NY'}
+getOrders
+Hibernate: select order0_.order_id as order_id1_0_, order0_.amount as amount2_0_, order0_.date_str as date_str3_0_, order0_.date_timestamp as date_tim4_0_, order0_.destination as destinat5_0_, order0_.product_id as product_6_0_, order0_.shipping_price as shipping7_0_, order0_.status as status8_0_ from `order` order0_
+FromDB: Order{id=1, productId=2, dateTimestamp=1481997509348, dateStr='2016-12-17T17:58:29.348Z', amount=500, status='BACK_ORDER', shippingPrice=13.0, destination='NY'},Order{id=2, productId=2, dateTimestamp=1481997744568, dateStr='2016-12-17T18:02:24.568Z', amount=500, status='IN_STOCK', shippingPrice=13.0, destination='NY'},Order{id=3, productId=3, dateTimestamp=1481999094767, dateStr='2016-12-17T18:24:54.767Z', amount=5000, status='IN_STOCK', shippingPrice=0.0, destination='NY'}
+getProduct for productId: 3
+Hibernate: select product0_.product_id as product_1_1_0_, product0_.description as descript2_1_0_, product0_.name as name3_1_0_, product0_.price as price4_1_0_, product0_.provider as provider5_1_0_ from product product0_ where product0_.product_id=?
+FromDB: Product{id=3, name='pot', price=13.5, provider='china-something', description='pots used for planting'}
