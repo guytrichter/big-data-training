@@ -16,17 +16,17 @@ public class RestController {
         return true;
     }
 
-    public static void main(String[] args) {
-
-        Order order = new Order();
-        order.setProductId(2L);
-        order.setAmount(500);
-        order.setDestination("NY");
-        order.setShippingPrice(13D);
-        order.setStatus("BACK_ORDER");
-
-        System.out.println(order);
-    }
+//    public static void main(String[] args) {
+//
+//        Order order = new Order();
+//        order.setProductId(2L);
+//        order.setAmount(500);
+//        order.setDestination("NY");
+//        order.setShippingPrice(13D);
+//        order.setStatus("BACK_ORDER");
+//
+//        System.out.println(order);
+//    }
 
 
 }

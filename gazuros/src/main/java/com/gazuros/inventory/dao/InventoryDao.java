@@ -1,15 +1,15 @@
 package com.gazuros.inventory.dao;
 
-import com.gazuros.inventory.model.Product;
+import com.gazuros.inventory.model.Inventory;
 import org.springframework.data.repository.CrudRepository;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 /**
  * Created by guy on 12/17/16.
  */
 @Transactional
-public interface ProductDao extends CrudRepository<Product, Long> {
+public interface InventoryDao extends CrudRepository<Inventory, Long> {
 
+    Inventory findByProductId(long productId);
 }

@@ -1,6 +1,8 @@
 package com.gazuros.inventory.controller;
 
+import com.gazuros.inventory.dao.InventoryDao;
 import com.gazuros.inventory.dao.OrderDao;
+import com.gazuros.inventory.model.Inventory;
 import com.gazuros.inventory.model.Order;
 import com.google.common.base.Joiner;
 import org.joda.time.DateTime;
@@ -19,6 +21,9 @@ public class OrderController {
 
     @Autowired
     private OrderDao orderDao;
+
+    @Autowired
+    private InventoryDao inventoryDao;
 
     @RequestMapping(value = "/orders/create", method = RequestMethod.POST)
     @ResponseBody
@@ -56,6 +61,22 @@ public class OrderController {
         updatedOrder.setStatus(status);
         Order updatedOrderFromDb = orderDao.save(updatedOrder);
         System.out.println("UpdatedOrder: " + updatedOrderFromDb);
+
+        System.out.println("Updating inventory for productId: " + updatedOrderFromDb.getProductId());
+        Inventory inventory = inventoryDao.findByProductId(updatedOrderFromDb.getProductId());
+        System.out.println("Inventory: " + inventory);
+
+        if (null == inventory) {
+            inventory = new Inventory();
+            inventory.setProductId(updatedOrderFromDb.getProductId());
+            inventory.setCount(0);
+        }
+
+        int newAmount = updatedOrderFromDb.getAmount() + inventory.getCount();
+        inventory.setCount(newAmount);
+        inventory.setLastUpdate(DateTime.now(DateTimeZone.UTC).getMillis());
+        Inventory newInventory = inventoryDao.save(inventory);
+        System.out.println("newInventory: " + newInventory);
 
         return fromDb;
     }
