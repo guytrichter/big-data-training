@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -49,6 +50,7 @@ public class OrderController {
         return fromDb;
     }
 
+    @Transactional
     @RequestMapping(value = "/orders/update/{orderId}", method = RequestMethod.PUT)
     @ResponseBody
     public Order updateOrder(@PathVariable long orderId, @RequestParam String status) {
