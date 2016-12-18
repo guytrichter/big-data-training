@@ -1,15 +1,14 @@
 package com.gazuros.inventory.controller;
 
 import com.gazuros.inventory.dao.InventoryDao;
-import com.gazuros.inventory.dao.ProductDao;
 import com.gazuros.inventory.model.Inventory;
-import com.gazuros.inventory.model.Product;
 import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,18 +32,33 @@ public class InventoryController {
     @Autowired
     private InventoryDao inventoryDao;
 
+    @Value("${gazuros.kit.bonsai}")
+    private String bonsaiKitsStr;
+
     private Multimap<String, Pair<Long, Integer>> kits = HashMultimap.create();
 
     @PostConstruct
     public void init() {
 
-        //bonsai kit
-        kits.put(BONSAI_KIT, Pair.of(2L, 5));  //pots => 5
-        kits.put(BONSAI_KIT, Pair.of(3L, 1));  //box => 1
-
-
         System.out.println("============ START APP ===============");
 
+        //bonsai kit
+        fillKitsStr(bonsaiKitsStr);
+
+
+        System.out.println("kitsMap: " + kits);
+
+    }
+
+    private void fillKitsStr(String kitsStr) {
+
+
+        String[] productIdToQuantityPairs = kitsStr.split(",");
+        for (String productIdToQuantityPairStr : productIdToQuantityPairs) {
+
+            String[] productIdToQuantityPair = productIdToQuantityPairStr.split(":");
+            kits.put(BONSAI_KIT, Pair.of(Long.valueOf(productIdToQuantityPair[0]), Integer.valueOf(productIdToQuantityPair[1])));  //pots => 5
+        }
     }
 
     @RequestMapping(value = "/inventory/getCurrentInventory", method = RequestMethod.GET)
@@ -61,20 +75,22 @@ public class InventoryController {
     @Transactional
     @RequestMapping(value = "/inventory/removeNumBonsaiKitsFromInventory", method = RequestMethod.PUT)
     @ResponseBody
-    public void removeNumBonsaiKitsFromInventory(@RequestParam int numBonsaiKitsToRemove) {
+    public void removeNumBonsaiKitsFromInventory(@RequestParam String kitName, @RequestParam int numKitsToRemove) {
 
-        Collection<Pair<Long, Integer>> bonsaiKitProducts = this.kits.get(BONSAI_KIT);
-        for (Pair<Long, Integer> pair : bonsaiKitProducts) {
+        System.out.println("removeNumBonsaiKitsFromInventory kitName: " + kitName + ", numKitsToRemove: " + numKitsToRemove);
+
+        Collection<Pair<Long, Integer>> kitProducts = this.kits.get(kitName);
+        for (Pair<Long, Integer> pair : kitProducts) {
 
             Long productId = pair.getFirst();
             Integer numItemsInKit = pair.getSecond();
 
-            System.out.println("productId: " + productId + ", numItemsInKit: " + numItemsInKit);
+            System.out.println("kitName: " + kitName + ", productId: " + productId + ", numItemsInKit: " + numItemsInKit);
 
             Inventory inventory = inventoryDao.findByProductId(productId);
             System.out.println("Found inventory: " + inventory + " for productId: " + productId);
 
-            int newCount = inventory.getCount() - (numBonsaiKitsToRemove*numItemsInKit);
+            int newCount = inventory.getCount() - (numKitsToRemove*numItemsInKit);
             inventory.setCount(newCount);
             inventory.setLastUpdate(DateTime.now(DateTimeZone.UTC).getMillis());
 

@@ -25,6 +25,9 @@ public class Inventory {
     @Column(name = "last_update")
     private long lastUpdate;
 
+    @Column(name = "packager")
+    private String packager;
+
     public long getId() {
         return id;
     }
@@ -57,6 +60,15 @@ public class Inventory {
         this.lastUpdate = lastUpdate;
     }
 
+
+    public String getPackager() {
+        return packager;
+    }
+
+    public void setPackager(String packager) {
+        this.packager = packager;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -87,6 +99,7 @@ public class Inventory {
                 ", productId=" + productId +
                 ", count=" + count +
                 ", lastUpdate=" + lastUpdate +
+                ", packager=" + packager +
                 '}';
     }
 }

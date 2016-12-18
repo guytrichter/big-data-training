@@ -30,10 +30,12 @@ public class OrderController {
     @ResponseBody
     public Long createNewOrder(@RequestBody Order order) {
 
-        Order newOrder = new Order(order);
+        DateTime now = DateTime.now(DateTimeZone.UTC);
+        order.setDateTimestamp(now.getMillis());
+        order.setDateStr(now.toString());
 
-        System.out.println("Received order: " + newOrder);
-        Order fromDb = orderDao.save(newOrder);
+        System.out.println("Received order: " + order);
+        Order fromDb = orderDao.save(order);
         System.out.println("FromDB: " + fromDb);
 
         return fromDb.getId();
@@ -59,9 +61,11 @@ public class OrderController {
         Order fromDb = orderDao.findOne(orderId);
         System.out.println("FromDB: " + fromDb);
 
-        Order updatedOrder = new Order(fromDb);
-        updatedOrder.setStatus(status);
-        Order updatedOrderFromDb = orderDao.save(updatedOrder);
+        DateTime now = DateTime.now(DateTimeZone.UTC);
+        fromDb.setDateTimestamp(now.getMillis());
+        fromDb.setDateStr(now.toString());
+        fromDb.setStatus(status);
+        Order updatedOrderFromDb = orderDao.save(fromDb);
         System.out.println("UpdatedOrder: " + updatedOrderFromDb);
 
         System.out.println("Updating inventory for productId: " + updatedOrderFromDb.getProductId());
@@ -77,6 +81,7 @@ public class OrderController {
         int newAmount = updatedOrderFromDb.getAmount() + inventory.getCount();
         inventory.setCount(newAmount);
         inventory.setLastUpdate(DateTime.now(DateTimeZone.UTC).getMillis());
+        inventory.setPackager(updatedOrderFromDb.getPackager());
         Inventory newInventory = inventoryDao.save(inventory);
         System.out.println("newInventory: " + newInventory);
 

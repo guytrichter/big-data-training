@@ -37,26 +37,8 @@ public class Order {
     @Column(name = "shipping_price")
     private double shippingPrice;
 
-    @Column(name="destination")
-    private String destination;
-
-    public Order() {
-        DateTime now = DateTime.now(DateTimeZone.UTC);
-        this.dateTimestamp = now.getMillis();
-        this.dateStr = now.toString();
-    }
-
-    public Order(Order other) {
-        DateTime now = DateTime.now(DateTimeZone.UTC);
-        this.dateTimestamp = now.getMillis();
-        this.dateStr = now.toString();
-        this.id = other.id;
-        this.amount = other.amount;
-        this.destination=other.destination;
-        this.shippingPrice = other.shippingPrice;
-        this.status=other.status;
-        this.productId = other.productId;
-    }
+    @Column(name="packager")
+    private String packager;
 
     public long getId() {
         return id;
@@ -114,12 +96,12 @@ public class Order {
         this.dateStr = dateStr;
     }
 
-    public String getDestination() {
-        return destination;
+    public String getPackager() {
+        return packager;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setPackager(String packager) {
+        this.packager = packager;
     }
 
     @Override
@@ -132,7 +114,7 @@ public class Order {
                 ", amount=" + amount +
                 ", status='" + status + '\'' +
                 ", shippingPrice=" + shippingPrice +
-                ", destination='" + destination + '\'' +
+                ", packager='" + packager + '\'' +
                 '}';
     }
 
