@@ -73,9 +73,9 @@ public class InventoryController {
     }
 
     @Transactional
-    @RequestMapping(value = "/inventory/removeNumBonsaiKitsFromInventory", method = RequestMethod.PUT)
+    @RequestMapping(value = "/inventory/removeNumKitsFromInventory", method = RequestMethod.PUT)
     @ResponseBody
-    public void removeNumBonsaiKitsFromInventory(@RequestParam String kitName, @RequestParam int numKitsToRemove) {
+    public void removeNumKitsFromInventory(@RequestParam String kitName, @RequestParam int numKitsToRemove) {
 
         System.out.println("removeNumBonsaiKitsFromInventory kitName: " + kitName + ", numKitsToRemove: " + numKitsToRemove);
 

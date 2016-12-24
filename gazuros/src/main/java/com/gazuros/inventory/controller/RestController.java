@@ -16,6 +16,11 @@ public class RestController {
         return true;
     }
 
+    @RequestMapping("/")
+    @ResponseBody
+    public boolean healthDefault() {
+        return true;
+    }
 //    public static void main(String[] args) {
 //
 //        Order order = new Order();
