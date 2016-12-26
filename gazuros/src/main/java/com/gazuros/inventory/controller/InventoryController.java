@@ -28,13 +28,21 @@ import java.util.List;
 public class InventoryController {
 
     private static final String BONSAI_KIT = "BONSAI";
+    private static final String HERBS_KIT = "HERBS";
+    private static final String CRAZY_GARDEN = "CRAZY_GARDEN";
 
     @Autowired
     private InventoryDao inventoryDao;
 
     @Value("${gazuros.kit.bonsai}")
     private String bonsaiKitsStr;
+    
+    @Value("${gazuros.kit.herbs}")
+    private String herbsKitStr;
 
+    @Value("${gazuros.kit.crazy.garden}")
+    private String crazyGardernKitStr;
+    
     private Multimap<String, Pair<Long, Integer>> kits = HashMultimap.create();
 
     @PostConstruct
@@ -43,21 +51,22 @@ public class InventoryController {
         System.out.println("============ START APP ===============");
 
         //bonsai kit
-        fillKitsStr(bonsaiKitsStr);
-
+        fillKitsStr(BONSAI_KIT, bonsaiKitsStr);
+        fillKitsStr(HERBS_KIT, herbsKitStr);
+        fillKitsStr(CRAZY_GARDEN, crazyGardernKitStr);
 
         System.out.println("kitsMap: " + kits);
 
     }
 
-    private void fillKitsStr(String kitsStr) {
+    private void fillKitsStr(String kitName, String kitsStr) {
 
 
         String[] productIdToQuantityPairs = kitsStr.split(",");
         for (String productIdToQuantityPairStr : productIdToQuantityPairs) {
 
             String[] productIdToQuantityPair = productIdToQuantityPairStr.split(":");
-            kits.put(BONSAI_KIT, Pair.of(Long.valueOf(productIdToQuantityPair[0]), Integer.valueOf(productIdToQuantityPair[1])));  //pots => 5
+            kits.put(kitsStr, Pair.of(Long.valueOf(productIdToQuantityPair[0]), Integer.valueOf(productIdToQuantityPair[1])));  //pots => 5
         }
     }
 
@@ -70,6 +79,27 @@ public class InventoryController {
         System.out.println("FromDB: " + Joiner.on(",").join(fromDb));
 
         return fromDb;
+    }
+    
+    @RequestMapping(value = "/inventory/removeNumBoxes", method = RequestMethod.PUT)
+    @ResponseBody
+    public int removeNumBoxes(@RequestParam int numBoxesToRemove) {
+
+        System.out.println("removeNumBoxes: " + numBoxesToRemove);
+        List<Inventory>  fromDb = (List<Inventory>) inventoryDao.findAll();
+        System.out.println("FromDB: " + Joiner.on(",").join(fromDb));
+        
+        Inventory inventory = inventoryDao.findByProductId(72); //master_carton prodictId
+        System.out.println("Found inventory: " + inventory);
+
+        int newCount = inventory.getCount() - numBoxesToRemove;
+        inventory.setCount(newCount);
+        inventory.setLastUpdate(DateTime.now(DateTimeZone.UTC).getMillis());
+
+        Inventory newBox = inventoryDao.save(inventory);
+        System.out.println("new inventory: " + fromDb);
+
+        return newBox.getCount();
     }
 
     @Transactional
