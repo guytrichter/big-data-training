@@ -17,9 +17,8 @@ public class RestController {
     }
 
     @RequestMapping("/")
-    @ResponseBody
     public String index() {
-        return "html/offer";
+        return "offer";
     }
 //    public static void main(String[] args) {
 //
