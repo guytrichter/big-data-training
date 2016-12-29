@@ -18,8 +18,8 @@ public class RestController {
 
     @RequestMapping("/")
     @ResponseBody
-    public boolean healthDefault() {
-        return true;
+    public String index() {
+        return "html/offer";
     }
 //    public static void main(String[] args) {
 //

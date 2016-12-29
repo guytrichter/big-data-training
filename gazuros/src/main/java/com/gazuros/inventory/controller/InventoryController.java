@@ -105,7 +105,7 @@ public class InventoryController {
     @Transactional
     @RequestMapping(value = "/inventory/removeNumKitsFromInventory", method = RequestMethod.PUT)
     @ResponseBody
-    public void removeNumKitsFromInventory(@RequestParam String kitName, @RequestParam int numKitsToRemove) {
+    public int removeNumKitsFromInventory(@RequestParam String kitName, @RequestParam int numKitsToRemove) {
 
         System.out.println("removeNumBonsaiKitsFromInventory kitName: " + kitName + ", numKitsToRemove: " + numKitsToRemove);
 
@@ -118,6 +118,10 @@ public class InventoryController {
             System.out.println("kitName: " + kitName + ", productId: " + productId + ", numItemsInKit: " + numItemsInKit);
 
             Inventory inventory = inventoryDao.findByProductId(productId);
+            if (null == inventory) {
+                return productId.intValue();
+            }
+
             System.out.println("Found inventory: " + inventory + " for productId: " + productId);
 
             int newCount = inventory.getCount() - (numKitsToRemove*numItemsInKit);
@@ -127,5 +131,7 @@ public class InventoryController {
             Inventory fromDb = inventoryDao.save(inventory);
             System.out.println("new inventory: " + fromDb);
         }
+
+        return -1;
     }
 }
