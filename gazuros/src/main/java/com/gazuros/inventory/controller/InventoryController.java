@@ -1,7 +1,9 @@
 package com.gazuros.inventory.controller;
 
 import com.gazuros.inventory.dao.InventoryDao;
+import com.gazuros.inventory.dao.ProductDao;
 import com.gazuros.inventory.model.Inventory;
+import com.gazuros.inventory.model.Product;
 import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -19,7 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by guy on 12/17/16.
@@ -33,6 +37,9 @@ public class InventoryController {
 
     @Autowired
     private InventoryDao inventoryDao;
+
+    @Autowired
+    private ProductDao productDao;
 
     @Value("${gazuros.kit.bonsai}")
     private String bonsaiKitsStr;
@@ -72,13 +79,23 @@ public class InventoryController {
 
     @RequestMapping(value = "/inventory/getCurrentInventory", method = RequestMethod.GET)
     @ResponseBody
-    public List<Inventory> getCurrentInventory() {
+    public Map<String, Integer> getCurrentInventory() {
+
+        Map<String, Integer> result = new HashMap<String, Integer>();
 
         System.out.println("getCurrentInventory");
         List<Inventory>  fromDb = (List<Inventory>) inventoryDao.findAll();
         System.out.println("FromDB: " + Joiner.on(",").join(fromDb));
 
-        return fromDb;
+        for (Inventory inventory : fromDb) {
+            Product product = productDao.findOne(inventory.getProductId());
+            if (null != product)
+                result.put(product.getName(), inventory.getCount());
+            else
+                System.out.println("Can't find product with Inventory: " + inventory);
+        }
+
+        return result;
     }
     
     @RequestMapping(value = "/inventory/removeNumBoxes", method = RequestMethod.PUT)
