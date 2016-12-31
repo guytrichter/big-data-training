@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Gazuro - Projects </title>
+<script src="./scripts/angular.min.js"></script>
+<script src="./scripts/ui-bootstrap.js"></script>
+<script src="./scripts/gazuroApp.js"></script>
+<link rel="stylesheet" href="./styles/bootstrap.css"></link>
+<link rel="stylesheet" href="./styles/gazuroStyle.css"></link>
+</head>
+<body class="gradientBkgr" ng-app="gazuroApp">
+<div id="userInbox" class="mainBox" ng-controller="inventoryController">
+<div class="container">
+<button class="col-sm-1 btn btn-xs btn-default back-button" ng-click="goToMainMenu()"> Go Back </button>
+<div class="col-sm-11 projectsTitle"> Inventory </div>
+<table class="projects table table-striped table-bordered">
+        <tr class="headerRow">
+        <th class="col-sm-3 h3">Name</div>  
+        <th class="col-sm-3 h3">Packager</div>
+        <th class="col-sm-3 h3">Quantity</div>
+        <th class="col-sm-3 h3">Provider</div>
+        </tr>
+    <tr class="projectRow" ng-repeat="item in currentInventory">
+<!--         <div class="row projectRow"> -->
+        <td class="col-sm-3">{{item.productId}}</div>  
+        <td class="col-sm-3">{{item.packager}}</div>
+        <td class="col-sm-3">{{item.count}}</div>
+        <td class="col-sm-3">Some provdier</div>
+        </tr>
+    </table>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>
+
