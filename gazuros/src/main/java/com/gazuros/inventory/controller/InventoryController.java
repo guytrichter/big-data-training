@@ -6,6 +6,7 @@ import com.gazuros.inventory.model.Inventory;
 import com.gazuros.inventory.model.Product;
 import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -13,17 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by guy on 12/17/16.
@@ -68,13 +63,18 @@ public class InventoryController {
 
     private void fillKitsStr(String kitName, String kitsStr) {
 
-
         String[] productIdToQuantityPairs = kitsStr.split(",");
         for (String productIdToQuantityPairStr : productIdToQuantityPairs) {
 
             String[] productIdToQuantityPair = productIdToQuantityPairStr.split(":");
             kits.put(kitsStr, Pair.of(Long.valueOf(productIdToQuantityPair[0]), Integer.valueOf(productIdToQuantityPair[1])));  //pots => 5
         }
+    }
+
+    @RequestMapping(value = "/inventory/getKitNames", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> getKitNames() {
+        return Lists.newArrayList(BONSAI_KIT, HERBS_KIT, CRAZY_GARDEN);
     }
 
     @RequestMapping(value = "/inventory/getCurrentInventory", method = RequestMethod.GET)
@@ -96,6 +96,22 @@ public class InventoryController {
         }
 
         return result;
+    }
+
+    @RequestMapping(value = "/inventory/updateCurrentInventory/{productId}", method = RequestMethod.PUT)
+    @ResponseBody
+    public boolean updateCurrentInventory(@PathVariable long productId, @RequestParam int count) {
+
+        System.out.println("updateCurrentInventory");
+        Inventory fromDb =  inventoryDao.findByProductId(productId);
+        System.out.println("FromDB: " + fromDb);
+
+        fromDb.setCount(count);
+        Inventory newObj = inventoryDao.save(fromDb);
+
+        System.out.println("new obj: " + newObj);
+
+        return (null != newObj);
     }
     
     @RequestMapping(value = "/inventory/removeNumBoxes", method = RequestMethod.PUT)
