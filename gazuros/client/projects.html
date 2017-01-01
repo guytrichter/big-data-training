@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Gazuro - Projects </title>
+<script src="./scripts/angular.min.js"></script>
+<script src="./scripts/ui-bootstrap.js"></script>
+<script src="./scripts/gazuroApp.js"></script>
+<link rel="stylesheet" href="./styles/bootstrap.css"></link>
+<link rel="stylesheet" href="./styles/gazuroStyle.css"></link>
+</head>
+<body class="gradientBkgr" ng-app="gazuroApp">
+<div id="userInbox" class="mainBox" ng-controller="projectController">
+<div class="container">
+<div class="col-sm-12 projectsTitle"> Projects </div>
+<table class="projects table table-striped table-bordered">
+        <tr class="headerRow">
+        <th class="col-sm-3 h3">Name</div>  
+        <th class="col-sm-3 h3">Description</div>
+        <th class="col-sm-3 h3">Price</div>
+        <th class="col-sm-3 h3">Provider</div>
+        </tr>
+    <tr class="projectRow" ng-repeat="project in projects">
+<!--         <div class="row projectRow"> -->
+        <td class="col-sm-3">{{project.name}}</div>  
+        <td class="col-sm-3">{{project.description}}</div>
+        <td class="col-sm-3">${{project.price}}</div>
+        <td class="col-sm-3">{{project.provider}}</div>
+        </tr>
+    </table>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>
+
