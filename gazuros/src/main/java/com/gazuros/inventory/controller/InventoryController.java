@@ -136,7 +136,7 @@ public class InventoryController {
 
             Inventory inventory = inventoryDao.findByProductId(productId);
             if (null == inventory) {
-                return productId.intValue();
+                throw new RuntimeException("Could not find product: " + productId);
             }
 
             System.out.println("Found inventory: " + inventory + " for productId: " + productId);

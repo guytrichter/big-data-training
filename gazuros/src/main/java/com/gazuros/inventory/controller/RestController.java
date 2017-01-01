@@ -18,7 +18,7 @@ public class RestController {
 
     @RequestMapping("/")
     public String index() {
-        return "index";
+        return "menu";
     }
 //    public static void main(String[] args) {
 //

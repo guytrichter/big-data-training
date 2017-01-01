@@ -1,34 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title> Gazuro - Projects </title>
-<script src="./scripts/angular.min.js"></script>
-<script src="./scripts/ui-bootstrap.js"></script>
-<script src="./scripts/gazuroApp.js"></script>
-<link rel="stylesheet" href="./styles/bootstrap.css"></link>
-<link rel="stylesheet" href="./styles/gazuroStyle.css"></link>
+  <title> Gazuro - Projects </title>
+  <script th:src="@{/js/angular.min.js}"></script>
+  <script th:src="@{/js/ui-bootstrap.js}"></script>
+  <script th:src="@{/js/gazuroApp.js}"></script>
+
+  <link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+  <link rel="stylesheet" th:href="@{/css/gazuroStyle.css}"></link>
 </head>
 <body class="gradientBkgr" ng-app="gazuroApp">
 <div id="dashboard" class="mainBox" ng-controller="menuController">
-<div class="container relBox">
-<div class="col-sm-12 projectsTitle" ng-click="goToMenu(1)"> Menu </div>
-<div class="col-sm-12 promptTitle" ng-show="shouldShow('menu_1')"> What would you like to do? </div>
-<div class="col-sm-12 promptTitle" ng-show="shouldShow('menu_2')"> Which order did you receive? </div>
-<div class="col-sm-12 promptTitle" ng-show="shouldShow('menu_3')"> Please select outgoing kits </div>
+  <div class="container relBox">
+    <div class="col-sm-12 projectsTitle" ng-click="goToMenu(1)"> Menu </div>
+    <div class="col-sm-12 promptTitle" ng-show="shouldShow('menu_1')"> What would you like to do? </div>
+    <div class="col-sm-12 promptTitle" ng-show="shouldShow('menu_2')"> Which order did you receive? </div>
+    <div class="col-sm-12 promptTitle" ng-show="shouldShow('menu_3')"> Please select outgoing kits </div>
 
-<div id="menu_options" class="col-sm-12 flexc">
-<button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToMenu(2)">Receive Back Orders</button>
-<button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToInventoryPage()">View Current Inventory</button>
-<button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToMenu(3)">Outgoing Kits</button>
-<button ng-repeat="order in backorders" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_2')" ng-click="confirmRecieve(order)">{{order.info}}</button>
-<button ng-repeat="kit in outgoingkits" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_3')" ng-click="placeOrder(kit)">{{kit.info}}</button>
-<button type="button" class="btn btn btn-lg flexb commentButton" ng-show="shouldShow('menu_2')" ng-click="">Comments</button>
-</div>
-</div>
+    <div id="menu_options" class="col-sm-12 flexc">
+      <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToMenu(2)">Receive Back Orders</button>
+      <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToInventoryPage()">View Current Inventory</button>
+      <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToMenu(3)">Outgoing Kits</button>
+      <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="showProductOrderForm()">Create New Order</button>
+      <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="testServer()">Test</button>
 
-<!-- Modals -->
+      <button ng-repeat="order in backorders" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_2')" ng-click="confirmRecieve(order)">{{order.info}}</button>
+      <button ng-repeat="kit in outgoingkits" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_3')" ng-click="placeOrder(kit)">{{kit.info}}</button>
+      <button type="button" class="btn btn btn-lg flexb commentButton" ng-show="shouldShow('menu_2')" ng-click="">Comments</button>
+    </div>
+  </div>
 
-<!-- Confirm Received Prompt -->
+  <!-- Modals -->
+
+  <!-- Confirm Received Prompt -->
   <div class="modal ng-hide" id="gazuroPrompt" ng-show="showPrompt">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
@@ -40,7 +44,7 @@
           <p>Please confirm you received {{itemToConfirm}}</p>
         </div>
         <div class="modal-footer">
-		  <button type="button" class="btn btn-default" ng-click="confirmOrder(itemToConfirm)">Confirm</button>
+          <button type="button" class="btn btn-default" ng-click="confirmOrder(itemToConfirm)">Confirm</button>
           <button type="button" class="btn btn-default" ng-click="hidePrompt()">Cancel</button>
         </div>
       </div>
@@ -53,31 +57,73 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" ng-click="hidePrompt()">&times;</button>
-		    <h3>Shipping {{selectedKit}}</h3>
+          <h3>Shipping {{selectedKit}}</h3>
         </div>
         <div class="modal-body container">
-  <form>
-    <div class="form-group">
-      <label for="numBoxes">How many boxes to ship</label>
-      <input type="number" min="0" class="form-control" id="numBoxes" ng-model="currentOrder.numberOfBoxes">
-    </div>
-    <div class="form-group">
-      <label for="numUnitsPerBox">How many units per box</label>
-      <input type="number" min="0" class="form-control" id="numUnitsPerBox" ng-model="currentOrder.unitsPerBox">
-    </div>
-  </form>
+          <form>
+            <div class="form-group">
+              <label for="numBoxes">How many boxes to ship</label>
+              <input type="number" min="0" class="form-control" id="numBoxes" ng-model="currentOrder.numberOfBoxes"> </input>
+            </div>
+            <div class="form-group">
+              <label for="numUnitsPerBox">How many units per box</label>
+              <input type="number" min="0" class="form-control" id="numUnitsPerBox" ng-model="currentOrder.unitsPerBox"></input>
+            </div>
+          </form>
 
-  <p>Total: <b> {{currentOrder.numberOfBoxes * currentOrder.unitsPerBox}}</b> {{selectedKit}} kits to be shipped </p>
+          <p>Total: <b> {{currentOrder.numberOfBoxes * currentOrder.unitsPerBox}}</b> {{selectedKit}} kits to be shipped </p>
         </div>
         <div class="modal-footer">
-		<span class="confirmText" ng-show="confirmShip"> Are you sure?</span>
-		  <button type="button" class="btn btn-default" ng-hide="confirmShip" ng-click="verifyBeforeOrder()">Confirm</button>
-		  <button type="button" class="btn btn-success" ng-show="confirmShip" ng-click="confirmOrder(itemToConfirm)">Ship it!</button>
+          <span class="confirmText" ng-show="confirmShip"> Are you sure?</span>
+          <button type="button" class="btn btn-default" ng-hide="confirmShip" ng-click="verifyBeforeOrder()">Confirm</button>
+          <button type="button" class="btn btn-success" ng-show="confirmShip" ng-click="confirmOrder(itemToConfirm)">Ship it!</button>
           <button type="button" class="btn btn-default" ng-click="hidePrompt()">Cancel</button>
         </div>
       </div>
     </div>
   </div>
+
+
+  <!-- New product form  -->
+  <div class="modal ng-hide" id="gazuroProductPrompt" ng-show="showProductPrompt">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="hidePrompt()">&times;</button>
+          <h3>Shipping {{selectedKit}}</h3>
+        </div>
+        <div class="modal-body container">
+          <form name="userForm" ng-submit="submitNewProduct()">
+            <div class="form-group">
+              <label>ProductID</label>
+              <input type="number" name="productId" class="form-control" ng-model="order.productId"></input>
+            </div>
+            <div class="form-group">
+              <label>Amount</label>
+              <input type="number" name="amount" class="form-control" min="0" ng-model="order.amount"></input>
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select ng-model="order.status">
+                <option value="BACK_ORDER">Back Order</option>
+                <option value="IN_STOCK">In Stock</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Shipping Price</label>
+              <input type="number" name="shippingPrice" class="form-control" min="0" ng-model="order.shippingPrice"></input>
+            </div>
+            <div class="form-group">
+              <label>Packager</label>
+              <input type="text" name="packager" class="form-control" ng-model="order.packager"></input>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

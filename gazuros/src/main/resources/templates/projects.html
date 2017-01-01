@@ -9,25 +9,19 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
     <link rel="stylesheet" th:href="@{/css/gazuroStyle.css}"></link>
 </head>
-
 <body class="gradientBkgr" ng-app="gazuroApp">
-<div id="userInbox" class="mainBox" ng-controller="inventoryController">
+<div id="userInbox" class="mainBox" ng-controller="projectController">
     <div class="container">
-        <button class="col-sm-1 btn btn-xs btn-default back-button" ng-click="goToMainMenu()"> Go Back </button>
-        <div class="col-sm-11 projectsTitle"> Inventory </div>
+        <div class="col-sm-12 projectsTitle"> Products </div>
         <table class="projects table table-striped table-bordered">
             <tr class="headerRow">
                 <th class="col-sm-3 h3">Name</th>
-                <th class="col-sm-3 h3">Packager</th>
-                <th class="col-sm-3 h3">Quantity</th>
-                <th class="col-sm-3 h3">Provider</th>
+                <th class="col-sm-3 h3">Description</th>
             </tr>
-            <tr class="projectRow" ng-repeat="item in currentInventory">
+            <tr class="projectRow" ng-repeat="project in projects">
                 <!--         <div class="row projectRow"> -->
-                <td class="col-sm-3">{{item.productId}}</td>
-                <td class="col-sm-3">{{item.packager}}</td>
-                <td class="col-sm-3">{{item.count}}</td>
-                <td class="col-sm-3">Some provdier</td>
+                <td class="col-sm-3">{{project.name}}</td>
+                <td class="col-sm-3">{{project.description}}</td>
             </tr>
         </table>
     </div>
