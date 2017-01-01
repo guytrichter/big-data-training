@@ -44,6 +44,18 @@ app.controller('projectController', function($scope, $window, $location, dataSer
 app.controller('inventoryController', function($scope, $window, $location, dataService) {
 	$scope.currentInventory = [{"id":2,"productId":72,"count":5000,"lastUpdate":1483024102902,"packager":"NY"}];
 	
+	$scope.currentInvetory2 = {"Inventory{id=2, productId=72, count=5000, lastUpdate=1483024102902, packager=NY}":{"id":72,"name":"master carton","price":0.0,"provider":"office depot","description":"master carton - can hold up to 24 units"}}
+	
+	// Dangerzone
+	function fixFormat(i_deformedObj) {
+		if (typeof(i_deformedObj) != 'undefined' && i_deformedObj != null) {
+			var fixedOutput = Object.keys(i_deformedObj)[0].replace("Inventory", "").replace(/=/g, ":").replace(/packager:/, "packager:'").replace("}", "'}");
+			return eval('(' + fixedOutput + ')');
+		}
+	}
+	
+
+	
 	$scope.goToMainMenu = function() {
 		var url = "file:///C:/Users/Oren/Documents/Git%20Coding%20Projects/Gazuros/client/menu.html#/";
 		$window.location.href = url;
@@ -55,6 +67,7 @@ app.controller('menuController', function($scope, $window, $location, dataServic
 	$scope.showPrompt = false;
 	$scope.showOrderPrompt = false;
 	$scope.confirmShip = false;
+	$scope.showProductPrompt = false;
 	
 	$scope.currentMenu = "menu_1";
 	
@@ -62,6 +75,8 @@ app.controller('menuController', function($scope, $window, $location, dataServic
 		numberOfBoxes : 0,
 		unitsPerBox : 0
 	};
+	
+	$scope.order = {};
 	
 	// stubs
 	$scope.backorders = [{info: '5000 turtlenecks'}, {info: '35000 neckturtles'}, {info: '12 yamalkes'}];
@@ -78,6 +93,10 @@ app.controller('menuController', function($scope, $window, $location, dataServic
 	
 	$scope.goToMenu = function(i_menuNumber, i_additionalParams) {
 		$scope.currentMenu = 'menu_' + i_menuNumber;
+	}
+	
+	$scope.showProductOrderForm = function() {
+		$scope.showProductPrompt = true;
 	}
 	
 	// Confirmations & Prompts
@@ -103,6 +122,7 @@ app.controller('menuController', function($scope, $window, $location, dataServic
 		$scope.showPrompt = false;
 		$scope.showOrderPrompt = false;
 		$scope.confirmShip = false;
+		$scope.showProductPrompt = false;
 	}
 	
 	$scope.showModalPrompt = function() {
@@ -120,6 +140,28 @@ app.controller('menuController', function($scope, $window, $location, dataServic
 		$window.location.href = url;
 	}
 	
+	// Ajaxs
+	$scope.submitNewProduct = function() {
+		console.log($scope.order);
+	}
+	  // $http({
+	  // method  : 'POST',
+	  // url     : 'http://gazuros-app.cfapps.io/orders/create',
+	  // data    : $scope.order,  
+	  // headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  // set the headers so angular passing info as form data (not request payload)
+	 // })
+	  // .success(function(data) {
+		// console.log(data);
+
+		// if (!data.success) {
+		  // // if not successful, bind errors to error variables
+			// console.log('Error posting new product');
+		// } else {
+		  // // if successful, bind success message to message
+		  // console.log('Success posting new product: ', data.message); 
+		// }
+	  // });
+	// };
 	
 });
 

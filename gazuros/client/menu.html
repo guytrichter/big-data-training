@@ -19,6 +19,7 @@
 <div id="menu_options" class="col-sm-12 flexc">
 <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToMenu(2)">Receive Back Orders</button>
 <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToInventoryPage()">View Current Inventory</button>
+<button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="showProductOrderForm()">Create New Order</button>
 <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToMenu(3)">Outgoing Kits</button>
 <button ng-repeat="order in backorders" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_2')" ng-click="confirmRecieve(order)">{{order.info}}</button>
 <button ng-repeat="kit in outgoingkits" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_3')" ng-click="placeOrder(kit)">{{kit.info}}</button>
@@ -78,7 +79,43 @@
       </div>
     </div>
   </div>
-
+  
+  <!-- New product form  -->
+  <div class="modal ng-hide" id="gazuroProductPrompt" ng-show="showProductPrompt">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="hidePrompt()">&times;</button>
+		    <h3>Shipping {{selectedKit}}</h3>
+        </div>
+        <div class="modal-body container">
+    <form name="userForm" ng-submit="submitNewProduct()">
+    <div class="form-group">
+        <label>ProductID</label>
+        <input type="number" name="productId" class="form-control" ng-model="order.productId">
+    </div>
+	<div class="form-group">
+        <label>Amount</label>
+        <input type="number" name="amount" class="form-control" min="0" ng-model="order.amount">
+    </div>
+	<div class="form-group">
+        <label>Status</label>
+		<select ng-model="order.status">
+			<option value="BACK_ORDER">Back Order
+			<option value="IN_STOCK">In Stock
+		</select>
+    </div>
+	<div class="form-group">
+        <label>Shipping Price</label>
+        <input type="number" name="shippingPrice" class="form-control" min="0" ng-model="order.shippingPrice">
+    </div>
+	<div class="form-group">
+        <label>Packager</label>
+        <input type="text" name="packager" class="form-control" ng-model="order.packager">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 </body>
 </html>
 
