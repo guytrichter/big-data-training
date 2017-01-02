@@ -76,7 +76,7 @@
         <div class="modal-footer">
           <span class="confirmText" ng-show="confirmShip"> Are you sure?</span>
           <button type="button" class="btn btn-default" ng-hide="confirmShip" ng-click="verifyBeforeOrder()">Confirm</button>
-          <button type="button" class="btn btn-success" ng-show="confirmShip" ng-click="confirmOrder(itemToConfirm)">Ship it!</button>
+          <button type="button" class="btn btn-success" ng-show="confirmShip" ng-click="confirmOrder(selectedKit)">Ship it!</button>
           <button type="button" class="btn btn-default" ng-click="hidePrompt()">Cancel</button>
         </div>
       </div>
@@ -90,13 +90,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" ng-click="hidePrompt()">&times;</button>
-          <h3>Shipping {{selectedKit}}</h3>
+          <h3>New Order</h3>
         </div>
         <div class="modal-body container">
           <form name="userForm" ng-submit="submitNewProduct()">
             <div class="form-group">
-              <label>ProductID</label>
-              <input type="number" name="productId" class="form-control" ng-model="order.productId"></input>
+              <label>Product Name</label>
+              <input type="text" name="name" class="form-control" ng-model="order.name"></input>
             </div>
             <div class="form-group">
               <label>Amount</label>
