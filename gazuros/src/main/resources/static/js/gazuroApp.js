@@ -27,20 +27,6 @@ app.controller('projectController', function($scope, $window, $location, dataSer
 	// // }();
 	// });
 
-	$scope.openMsg = function(i_msg) {
-		if (typeof(i_msg) != 'undefined' && i_msg != null) {
-			var url = "https://" + $window.location.host + "/message.html#/?msgID=" + i_msg._id;
-			$window.location.href = url;
-		}
-		else {
-			console.log("Error loading msg: " + i_msg);
-		}
-	}
-
-	$scope.goToInbox = function() {
-		var url = "https://" + $window.location.host + "/inbox.html";
-		$window.location.href = url;
-	}
 });
 
 app.controller('inventoryController', function($scope, $window, $location, dataService) {
@@ -87,12 +73,24 @@ app.controller('menuController', function($scope, $http, $window, $location, dat
 	$scope.order = {};
 
 	// stubs
-	$scope.backorders = [{info: '5000 turtlenecks'}, {info: '35000 neckturtles'}, {info: '12 yamalkes'}];
-	$scope.outgoingkits = [{info: 'Bonzai'}, {info: 'Crazy Garden'}, {info: 'Herbs'}];
+	$scope.backorders = [{"id":22,"productId":42,"dateTimestamp":1483023905926,"dateStr":"2016-12-29T15:05:05.926Z","amount":5000,"status":"BACK_ORDER","shippingPrice":0.0,"packager":"NY"},{"id":32,"productId":52,"dateTimestamp":1483023926733,"dateStr":"2016-12-29T15:05:26.733Z","amount":5000,"status":"BACK_ORDER","shippingPrice":0.0,"packager":"NY"}];
+	$scope.outgoingkits = ["BONSAI","HERBS","CRAZY_GARDEN"];
+	
+	// Get Data
+	dataService.getKitNames().then(function(response) {
+		if (response && response.data) {
+			$scope.outgoingkits = response.data;
+		}
+	});
+	dataService.getBackOrders().then(function(response) {
+		if (response && response.data) {
+			$scope.backorders = response.data;
+		}
+	});
+	
 
 	$scope.initMenu = function() {
 		$scope.currentMenu = "menu_1";
-
 	}();
 
 	$scope.shouldShow = function(i_menuNumber) {
@@ -174,40 +172,109 @@ app.controller('menuController', function($scope, $http, $window, $location, dat
 });
 
 // Services
-
 app.service('dataService', function($http) {
 	this.getAllProjects = function() {
-		return $http.get("http://gazuros-app.cfapps.io/products/getProducts").then(function(response) {
+		return $http.get("http://" + host + "/products/getProducts").then(function(response) {
 			return response;
 		});
 	}
+	
+	this.getBackOrders = function() {
+		return $http.get("http://" + host + "/orders/getOrdersByStatus?status=BACK_ORDER").then(function(response) {
+			return response;
+		});
+	}
+	
+	this.getKitNames = function() {
+		return $http.get("http://" + host + "/inventory/getKitNames").then(function(response) {
+			return response;
+		});
+	}
+	
+	this.updateBackOrder = function(i_productId, i_status) {
+		var status = i_status || 'IN_STOCK';
+		var link = "http://" + host + "/orders/update/" + i_productId + "?status=" + status; 
+		
+		return $http.put(link, {}).then(
+		function(response) {
+			// Success
+			console.log("DATASERVICE: Updated product %s successfully", i_productId);
+			return response;
+		}, 
+		function(response) {
+			// Failure
+			console.log("DATASERVICE: Failed to update product %s", i_productId);
+			return response.status;
+		});
+	}
 
-	// this.getMail = function() {
-	// return $http.get("https://medallia-test-om02.c9users.io/api/mail").then(function(response) {
-	// return response;
-	// });
-	// }
-
-	// this.markMessageRead = function(i_msgID) {
-	// return $http.put("https://medallia-test-om02.c9users.io/api/mail/" + i_msgID, {
-	// isRead: true
-	// }).then(function(response) {
-	// return response;
-	// });
-	//}
+	this.removeKitsFromStock = function(i_kitName, i_numberOfKitsToRemove) {
+		if (!!kitName) {
+			var link = "http://" + host + "/inventory/removeNumKitsFromInventory?kitName=" + i_kitName + "&numKitsToRemove=" + i_numberOfKitsToRemove;
+			
+			return $http.put(link, {}).then(
+			function(response) {
+				// Success
+				console.log("DATASERVICE: Removed %d %s kits successfully", i_numberOfKitsToRemove, i_kitName);
+				return response;
+			}, 
+			function(response) {
+				// Failure
+				console.log("DATASERVICE: Failed to remove %s kits", i_kitName);
+				return response.status;
+			});
+		}
+	}
+	
+	this.removeBoxesFromStock = function(i_numberOfBoxesToRemove) {
+		if (isInteger(i_numberOfBoxesToRemove)) {
+			var link = "http://" + host + "/inventory/removeNumBoxes?numBoxesToRemove=" + i_numberOfBoxesToRemove;	
+			
+			return $http.put(link, {}).then(
+			function(response) {
+				// Success
+				console.log("DATASERVICE: Removed %d boxes successfully", i_numberOfBoxesToRemove);
+				return response;
+			}, 
+			function(response) {
+				// Failure
+				console.log("DATASERVICE: Failed to remove boxes");
+				return response.status;
+			});
+		}
+	}
 });
 
-// Directives
-// app.directive("mailBox", function() {
-// 	return {
-// 		restrict: "E",
-// 		templateUrl: "./mailBoxTemplate.html",
-// 		scope: {
-// 			messages: '=',
-// 			openMsg: '='
-// 		}
-// 	};
-// });
+app.service('projectsService', function($http, dataService) {
+	this.mappings = {};
+	var self = this;
+	
+	this.init = function() { // Get all projects and map id to number for easy reference
+		dataService.getAllProjects().then(function(response) {
+			if (response && response.data && response.data.length > 0) {
+				var projects = response.data;
+				
+				projects.forEach(function(item) {
+					self.mappings[item.id] = item.name;
+				});
+			}
+		});
+	}();
+	
+	this.getNameForId = function(i_productId) {
+		if (self.mappings(i_productId)) {
+			return self.mappings[i_productId];
+		}
+	}
+}
+
+
+// Silly polyfill
+function isInteger(value) {
+  return typeof value === "number" && 
+    isFinite(value) && 
+    Math.floor(value) === value;
+};
 
 // app.directive("singleMessage", ['$location', 'mailService', function($location, mailService) {
 // return {
