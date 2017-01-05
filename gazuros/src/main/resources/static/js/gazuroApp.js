@@ -1,6 +1,6 @@
 var app = angular.module('gazuroApp', []);
-var host_test = "127.0.0.1:8080";
-var host = "gazuros-app.cfapps.io";
+var host = "127.0.0.1:8080";
+//var host = "gazuros-app.cfapps.io";
 
 // Controllers
 app.controller('projectController', function($scope, $window, $location, dataService) {
@@ -34,7 +34,7 @@ app.controller('inventoryController', function($scope, $window, $location, dataS
 
 });
 
-app.controller('menuController', function($scope, $http, $window, $location, dataService) {
+app.controller('menuController', function($scope, $http, $window, $location, dataService, projectsService) {
 	$scope.showPrompt = false;
 	$scope.showOrderPrompt = false;
 	$scope.confirmShip = false;
@@ -54,6 +54,11 @@ app.controller('menuController', function($scope, $http, $window, $location, dat
 	}
 
 	$scope.order = {};
+	$scope.mappings = projectsService.init(function(mappings) {
+		console.log(mappings);
+	});
+
+
 
 	// stubs
 	$scope.backorders = [{"id":22,"productId":42,"dateTimestamp":1483023905926,"dateStr":"2016-12-29T15:05:05.926Z","amount":5000,"status":"BACK_ORDER","shippingPrice":0.0,"packager":"NY"},{"id":32,"productId":52,"dateTimestamp":1483023926733,"dateStr":"2016-12-29T15:05:26.733Z","amount":5000,"status":"BACK_ORDER","shippingPrice":0.0,"packager":"NY"}];
@@ -117,13 +122,13 @@ app.controller('menuController', function($scope, $http, $window, $location, dat
 		
 		if (isInteger(totalKitsToRemove)) {
 			// Remove kits and boxes
-			dataService.removeKitsFromStock(i_selectedKit, totalKitsToRemove).then(response) {
+			dataService.removeKitsFromStock(i_selectedKit, totalKitsToRemove).then(function(response) {
 				console.log(response);
-			}
+			});
 			
-			dataService.removeBoxesFromStock(boxesToRemove).then(response) {
+			dataService.removeBoxesFromStock(boxesToRemove).then(function(response) {
 				console.log(response);
-			}
+			});
 		}
 	}
 	
@@ -177,19 +182,18 @@ app.service('dataService', function($http) {
 		});
 	}
 	
-	this.updateBackOrder = function(i_productId, i_status) {
-		var status = i_status || 'IN_STOCK';
-		var link = "http://" + host + "/orders/update/" + i_productId + "?status=" + status; 
-		
+	this.updateBackOrder = function(i_orderId, i_status) {
+		var link = "http://" + host + "/orders/update/" + i_orderId + "?status=IN_STOCK";
+
 		return $http.put(link, {}).then(
 		function(response) {
 			// Success
-			console.log("DATASERVICE: Updated product %s successfully", i_productId);
+			console.log("DATASERVICE: Updated order %s successfully", i_orderId);
 			return response;
 		}, 
 		function(response) {
 			// Failure
-			console.log("DATASERVICE: Failed to update product %s", i_productId);
+			console.log("DATASERVICE: Failed to update order %s", i_orderId);
 			return response.status;
 		});
 	}
@@ -252,27 +256,34 @@ app.service('dataService', function($http) {
 });
 
 app.service('projectsService', function($http, dataService) {
-	this.mappings = {};
 	var self = this;
-	
-	this.init = function() { // Get all projects and map id to number for easy reference
+	self.mappings = {};
+
+	this.init = function(callback) { // Get all projects and map id to number for easy reference
 		dataService.getAllProjects().then(function(response) {
 			if (response && response.data && response.data.length > 0) {
 				var projects = response.data;
-				
+				                             console.log(response);
 				projects.forEach(function(item) {
 					self.mappings[item.id] = item.name;
 				});
 			}
+
+			if (callback) {
+				callback(self.mappings);
+			}
+			else {
+				return self.mappings;
+			}
 		});
-	}();
+	};
 	
 	this.getNameForId = function(i_productId) {
 		if (self.mappings(i_productId)) {
 			return self.mappings[i_productId];
 		}
 	}
-}
+});
 
 
 // Silly polyfill
