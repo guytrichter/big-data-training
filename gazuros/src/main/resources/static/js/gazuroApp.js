@@ -17,11 +17,11 @@ app.controller('projectController', function($scope, $window, $location, dataSer
 app.controller('inventoryController', function($scope, $window, $location, dataService) {
 	$scope.currentInventory = [{name: "master carton", amount: 8000}];
 	
-	dataService.getCurrentInventory().then(response) {
+	dataService.getCurrentInventory().then(function(response) {
 		if (response && response.data) {
 			$scope.currentInventory = formatInventoryResponse(response.data);	
 		}
-	}
+	});
 	
 	function formatInventoryResponse(i_responseObj) {
 		var keys = Object.keys(i_responseObj);
