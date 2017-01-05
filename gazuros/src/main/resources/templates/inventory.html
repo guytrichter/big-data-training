@@ -18,16 +18,12 @@
         <table class="projects table table-striped table-bordered">
             <tr class="headerRow">
                 <th class="col-sm-3 h3">Name</th>
-                <th class="col-sm-3 h3">Packager</th>
                 <th class="col-sm-3 h3">Quantity</th>
-                <th class="col-sm-3 h3">Provider</th>
             </tr>
             <tr class="projectRow" ng-repeat="item in currentInventory">
                 <!--         <div class="row projectRow"> -->
-                <td class="col-sm-3">{{item.productId}}</td>
-                <td class="col-sm-3">{{item.packager}}</td>
-                <td class="col-sm-3">{{item.count}}</td>
-                <td class="col-sm-3">Some provdier</td>
+                <td class="col-sm-3">{{item.name}}</td>
+                <td class="col-sm-3">{{item.amount}}</td>
             </tr>
         </table>
     </div>

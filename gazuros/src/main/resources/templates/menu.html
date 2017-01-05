@@ -24,8 +24,8 @@
       <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="showProductOrderForm()">Create New Order</button>
       <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="testServer()">Test</button>
 
-      <button ng-repeat="order in backorders" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_2')" ng-click="confirmRecieve(order)">{{order.id}}</button>
-      <button ng-repeat="kit in outgoingkits" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_3')" ng-click="placeOrder(kit)">{{kit.info}}</button>
+      <button ng-repeat="order in backorders" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_2')" ng-click="confirmRecieve(order)">{{order.amount}} {{order.name}}</button>
+      <button ng-repeat="kit in outgoingkits" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_3')" ng-click="placeOrder(kit)">{{kit}}</button>
       <button type="button" class="btn btn btn-lg flexb commentButton" ng-show="shouldShow('menu_2')" ng-click="">Comments</button>
     </div>
   </div>
@@ -44,7 +44,7 @@
           <p>Please confirm you received {{itemToConfirm}}</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" ng-click="confirmOrder(itemToConfirm)">Confirm</button>
+          <button type="button" class="btn btn-default" ng-click="updateBackOrder(itemToConfirm)">Confirm</button>
           <button type="button" class="btn btn-default" ng-click="hidePrompt()">Cancel</button>
         </div>
       </div>
@@ -96,7 +96,9 @@
           <form name="userForm" ng-submit="submitNewProduct()">
             <div class="form-group">
               <label>Product Name</label>
-              <input type="text" name="name" class="form-control" ng-model="order.name"></input>
+              <select ng-model="order.productId">
+			        <option ng-repeat="product in products" value="{{option.id}}">{{option.name}}</option>
+			  </select>
             </div>
             <div class="form-group">
               <label>Amount</label>
@@ -105,14 +107,14 @@
             <div class="form-group">
               <label>Status</label>
               <select ng-model="order.status">
-                <option value="BACK_ORDER">Back Order</option>
-                <option value="IN_STOCK">In Stock</option>
+                <option selected value="BACK_ORDER">Back Order</option>
+                <!-- <option value="IN_STOCK">In Stock</option> -->
               </select>
             </div>
-            <div class="form-group">
+<!--        <div class="form-group">
               <label>Shipping Price</label>
               <input type="number" name="shippingPrice" class="form-control" min="0" ng-model="order.shippingPrice"></input>
-            </div>
+            </div> -->
             <div class="form-group">
               <label>Packager</label>
               <input type="text" name="packager" class="form-control" ng-model="order.packager"></input>

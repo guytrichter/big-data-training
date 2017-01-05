@@ -10,14 +10,34 @@ app.controller('projectController', function($scope, $window, $location, dataSer
 		if (response && response.data) {
 			$scope.projects = response.data;	
 		}
-	})
+	});
 
 });
 
 app.controller('inventoryController', function($scope, $window, $location, dataService) {
-	$scope.currentInventory = [{"id":2,"productId":72,"count":5000,"lastUpdate":1483024102902,"packager":"NY"}];
-
-	$scope.currentInvetory2 = {"Inventory{id=2, productId=72, count=5000, lastUpdate=1483024102902, packager=NY}":{"id":72,"name":"master carton","price":0.0,"provider":"office depot","description":"master carton - can hold up to 24 units"}}
+	$scope.currentInventory = [{name: "master carton", amount: 8000}];
+	
+	dataService.getCurrentInventory().then(response) {
+		if (response && response.data) {
+			$scope.currentInventory = formatInventoryResponse(response.data);	
+		}
+	}
+	
+	function formatInventoryResponse(i_responseObj) {
+		var keys = Object.keys(i_responseObj);
+		var output = [];
+		
+		keys.forEach(function(key) {
+			var tempObj = {
+				name : key,
+				amount : i_responseObj[key]
+			};
+			
+			output.push(tempObj);
+		});
+		
+		return output;
+	}
 
 	// Dangerzone
 	function fixFormat(i_deformedObj) {
@@ -53,9 +73,12 @@ app.controller('menuController', function($scope, $http, $window, $location, dat
 		});
 	}
 
-	$scope.order = {};
-	$scope.mappings = projectsService.init(function(mappings) {
-		console.log(mappings);
+	$scope.order = {shippingPrice : 0.0};
+	$scope.mappings = {};
+	$scope.products = {};
+	
+	projectsService.init(function(mappings) {
+		$scope.mappings = mappings;
 	});
 
 
@@ -73,6 +96,18 @@ app.controller('menuController', function($scope, $http, $window, $location, dat
 	dataService.getBackOrders().then(function(response) {
 		if (response && response.data) {
 			$scope.backorders = response.data;
+			
+			if ($scope.backorders && $scope.backorders.length > 0) {
+				$scope.backorders.forEach(function(order) {
+				order.name = getNameForId(order.productId);
+				});
+			}
+		}
+	});
+	
+	dataService.getAllProjects().then(function(response) {
+		if (response && response.data) {
+			$scope.products = response.data;	
 		}
 	});
 	
@@ -96,7 +131,7 @@ app.controller('menuController', function($scope, $http, $window, $location, dat
 	// Confirmations & Prompts
 	$scope.confirmRecieve = function(i_order) {
 		if (i_order && !!i_order.info) {
-			$scope.itemToConfirm = i_order.info;
+			$scope.itemToConfirm = i_order.name;
 			$scope.showPrompt = true;
 		}
 	}
@@ -105,10 +140,17 @@ app.controller('menuController', function($scope, $http, $window, $location, dat
 		$scope.confirmShip = true;
 	}
 	
+	$scope.updateBackOrder = function(i_order) {
+		dataService.updateBackOrder(i_order.id).then(function(response) {
+			console.log(response);
+			$scope.hidePrompt();
+		});
+	}
+	
 	// Stupid naming, remove boxes from back order
 	$scope.placeOrder = function(i_order) {
-		if (i_order && !!i_order.info) {
-			$scope.selectedKit = i_order.info;
+		if (!!i_order) {
+			$scope.selectedKit = i_order;
 			$scope.currentOrder = { numberOfBoxes : 0, unitsPerBox : 0};
 			$scope.showOrderPrompt = true;
 		}
@@ -135,7 +177,7 @@ app.controller('menuController', function($scope, $http, $window, $location, dat
 	// Create new product
 	$scope.submitNewProduct = function() {
 		dataService.createNewProduct($scope.order).then(function(response) {
-			$scope.order = {}; // Reset order object
+			$scope.order = {shippingPrice : 0.0}; // Reset order object
 	});
 	}
 
@@ -180,7 +222,15 @@ app.service('dataService', function($http) {
 		return $http.get("http://" + host + "/inventory/getKitNames").then(function(response) {
 			return response;
 		});
-	}
+	
+	
+	this.getCurrentInventory = function() {
+		return $http.get("http://" + host + "/inventory/getCurrentInventory").then(function(response) {
+			return response;
+		});
+	}}
+	
+	
 	
 	this.updateBackOrder = function(i_orderId, i_status) {
 		var link = "http://" + host + "/orders/update/" + i_orderId + "?status=IN_STOCK";
@@ -263,7 +313,7 @@ app.service('projectsService', function($http, dataService) {
 		dataService.getAllProjects().then(function(response) {
 			if (response && response.data && response.data.length > 0) {
 				var projects = response.data;
-				                             console.log(response);
+				
 				projects.forEach(function(item) {
 					self.mappings[item.id] = item.name;
 				});
@@ -279,7 +329,7 @@ app.service('projectsService', function($http, dataService) {
 	};
 	
 	this.getNameForId = function(i_productId) {
-		if (self.mappings(i_productId)) {
+		if (self.mappings[i_productId]) {
 			return self.mappings[i_productId];
 		}
 	}
