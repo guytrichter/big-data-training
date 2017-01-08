@@ -29,6 +29,7 @@ public class InventoryController {
     private static final String BONSAI_KIT = "BONSAI";
     private static final String HERBS_KIT = "HERBS";
     private static final String CRAZY_GARDEN = "CRAZY_GARDEN";
+    public static final int BOX_PRODUCT_ID = 72;
 
     @Autowired
     private InventoryDao inventoryDao;
@@ -67,7 +68,7 @@ public class InventoryController {
         for (String productIdToQuantityPairStr : productIdToQuantityPairs) {
 
             String[] productIdToQuantityPair = productIdToQuantityPairStr.split(":");
-            kits.put(kitsStr, Pair.of(Long.valueOf(productIdToQuantityPair[0]), Integer.valueOf(productIdToQuantityPair[1])));  //pots => 5
+            kits.put(kitName, Pair.of(Long.valueOf(productIdToQuantityPair[0]), Integer.valueOf(productIdToQuantityPair[1])));  //pots => 5
         }
     }
 
@@ -122,7 +123,7 @@ public class InventoryController {
         List<Inventory>  fromDb = (List<Inventory>) inventoryDao.findAll();
         System.out.println("FromDB: " + Joiner.on(",").join(fromDb));
         
-        Inventory inventory = inventoryDao.findByProductId(72); //master_carton prodictId
+        Inventory inventory = inventoryDao.findByProductId(BOX_PRODUCT_ID); //master_carton prodictId
         System.out.println("Found inventory: " + inventory);
 
         int newCount = inventory.getCount() - numBoxesToRemove;
@@ -143,6 +144,10 @@ public class InventoryController {
         System.out.println("removeNumBonsaiKitsFromInventory kitName: " + kitName + ", numKitsToRemove: " + numKitsToRemove);
 
         Collection<Pair<Long, Integer>> kitProducts = this.kits.get(kitName);
+        if (kitProducts.isEmpty()) {
+            throw new RuntimeException("Can't find kit: " + kitName);
+        }
+
         for (Pair<Long, Integer> pair : kitProducts) {
 
             Long productId = pair.getFirst();
