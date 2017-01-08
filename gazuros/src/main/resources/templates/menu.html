@@ -125,7 +125,21 @@
       </div>
     </div>
   </div>
+  
+ <!-- Notifications  -->
+<div id="successNotification" class="alert alert-success" ng-show="showSucess"> 
+  <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="hideNotifications()">&times;</a>
+  <strong>Success!</strong> {{successNotification}}
+ </div>
+ 
+<div id="errorNotification" class="alert alert-danger" ng-show="showError"> 
+  <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="hideNotifications()">&times;</a>
+  <strong>Error!</strong> {{errorNotification}}
+ </div>
+  
+  
 </div>
+
 
 </body>
 </html>
