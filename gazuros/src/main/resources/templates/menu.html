@@ -128,12 +128,12 @@
   
  <!-- Notifications  -->
 <div id="successNotification" class="alert alert-success fade" ng-show="showSuccess"> 
-  <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="hideNotifications()">&times;</a>
+  <a href="#" class="close" ng-click="hideNotifications()">&times;</a>
   <strong>Success!</strong> {{successNotification}}
  </div>
  
 <div id="errorNotification" class="alert alert-danger fade" ng-show="showError"> 
-  <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="hideNotifications()">&times;</a>
+  <a href="#" class="close" ng-click="hideNotifications()">&times;</a>
   <strong>Error!</strong> {{errorNotification}}
  </div>
   
