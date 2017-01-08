@@ -263,13 +263,14 @@ app.service('dataService', function($http) {
 		return $http.get("http://" + host + "/inventory/getKitNames").then(function(response) {
 			return response;
 		});
+	}
 	
 	
 	this.getCurrentInventory = function() {
 		return $http.get("http://" + host + "/inventory/getCurrentInventory").then(function(response) {
 			return response;
 		});
-	}}
+	}
 	
 	
 	
