@@ -24,7 +24,7 @@
       <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="showProductOrderForm()">Create New Order</button>
       <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="testServer()">Test</button>
 
-      <button ng-repeat="order in backorders" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_2')" ng-click="confirmRecieve(order)">{{order.amount}} {{order.name}}</button>
+      <button ng-repeat="backorder in backorders" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_2')" ng-click="confirmRecieve(backorder)">{{backorder.amount}} {{backorder.name}}</button>
       <button ng-repeat="kit in outgoingkits" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_3')" ng-click="placeOrder(kit)">{{kit}}</button>
       <button type="button" class="btn btn btn-lg flexb commentButton" ng-show="shouldShow('menu_2')" ng-click="">Comments</button>
     </div>

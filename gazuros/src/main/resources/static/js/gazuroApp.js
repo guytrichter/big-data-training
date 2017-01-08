@@ -99,7 +99,7 @@ app.controller('menuController', function($scope, $http, $window, $location, dat
 			
 			if ($scope.backorders && $scope.backorders.length > 0) {
 				$scope.backorders.forEach(function(order) {
-				order.name = getNameForId(order.productId);
+				order.name = projectsService.getNameForId(order.productId);
 				});
 			}
 		}
@@ -249,7 +249,7 @@ app.service('dataService', function($http) {
 	}
 
 	this.removeKitsFromStock = function(i_kitName, i_numberOfKitsToRemove) {
-		if (!!kitName) {
+		if (!!i_kitName) {
 			var link = "http://" + host + "/inventory/removeNumKitsFromInventory?kitName=" + i_kitName + "&numKitsToRemove=" + i_numberOfKitsToRemove;
 			
 			return $http.put(link, {}).then(
