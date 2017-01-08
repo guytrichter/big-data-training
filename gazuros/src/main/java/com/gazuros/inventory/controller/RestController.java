@@ -17,9 +17,20 @@ public class RestController {
     }
 
     @RequestMapping("/")
-    public String index() {
+    public String menu() {
         return "menu";
     }
+
+    @RequestMapping("/projects.html")
+    public String products() {
+        return "projects";
+    }
+
+    @RequestMapping("/inventory.html")
+    public String inventory() {
+        return "inventory";
+    }
+
 //    public static void main(String[] args) {
 //
 //        Order order = new Order();

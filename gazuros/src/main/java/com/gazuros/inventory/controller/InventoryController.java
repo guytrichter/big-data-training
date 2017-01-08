@@ -92,7 +92,7 @@ public class InventoryController {
             if (null != product)
                 result.put(product.getName(), inventory.getCount());
             else
-                System.out.println("Can't find product with Inventory: " + inventory);
+                throw new RuntimeException("Can't find product with Inventory: " + inventory);
         }
 
         return result;
