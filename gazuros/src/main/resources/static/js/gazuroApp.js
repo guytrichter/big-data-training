@@ -376,16 +376,6 @@ app.service('projectsService', function($http, dataService) {
 	}
 });
 
-app.service('notificationService, function($timeout) {
-	this.showSuccess(i_text) {
-		
-	}
-	
-	this.showError(i_text) {
-		
-	}
-});
-
 
 // Silly polyfill
 function isInteger(value) {
