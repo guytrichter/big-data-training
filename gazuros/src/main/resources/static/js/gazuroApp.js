@@ -54,11 +54,13 @@ app.controller('inventoryController', function($scope, $window, $location, dataS
 
 });
 
-app.controller('menuController', function($scope, $http, $window, $location, dataService, projectsService) {
+app.controller('menuController', function($scope, $http, $window, $location, $timeout, dataService, projectsService) {
 	$scope.showPrompt = false;
 	$scope.showOrderPrompt = false;
 	$scope.confirmShip = false;
 	$scope.showProductPrompt = false;
+	$scope.showSuccess = false;
+	$scope.showError = false;
 
 	$scope.currentMenu = "menu_1";
 
@@ -80,7 +82,6 @@ app.controller('menuController', function($scope, $http, $window, $location, dat
 	projectsService.init(function(mappings) {
 		$scope.mappings = mappings;
 	});
-
 
 
 	// stubs
@@ -166,10 +167,22 @@ app.controller('menuController', function($scope, $http, $window, $location, dat
 			// Remove kits and boxes
 			dataService.removeKitsFromStock(i_selectedKit, totalKitsToRemove).then(function(response) {
 				console.log(response);
+				if (response.status == 200) {
+					$scope.showSuccessNotification("%d %s Kits successfully removed", totalKitsToRemove, i_selectedKit);
+				} else {
+					$scope.showErrorNotification("Error removing kits");
+				}
+				
 			});
 			
 			dataService.removeBoxesFromStock(boxesToRemove).then(function(response) {
 				console.log(response);
+				if (response.status == 200) {
+					$scope.showSuccessNotification("%s Boxes successfully removed", boxesToRemove);
+				}
+				else {
+					$scope.showErrorNotification("Error removing boxes");
+				}
 			});
 		}
 	}
@@ -202,6 +215,34 @@ app.controller('menuController', function($scope, $http, $window, $location, dat
 		var url = "projects.html";
 		$window.location.href = url;
 	}
+	
+	
+	// Notification Controllers
+	$scope.hideNotifications = function() {
+		$scope.showSuccess = false;
+		$scope.showError = false;
+	}
+	
+	$scope.showSuccessNotification = function(i_successText) {
+		$scope.successNotification = i_successText;
+		$scope.showSuccess = true;
+		
+		$timeout(function () {
+			$scope.hideNotifications();
+		}, 3000);
+	}
+	
+	$scope.showErrorNotification = function(i_errorText) {
+		$scope.errorNotification = i_errorText;
+		$scope.showError = true;
+		
+		$timeout(function () {
+			$scope.hideNotifications();
+		}, 3000);
+	}
+	
+	
+	
 });
 
 // Services
@@ -332,6 +373,16 @@ app.service('projectsService', function($http, dataService) {
 		if (self.mappings[i_productId]) {
 			return self.mappings[i_productId];
 		}
+	}
+});
+
+app.service('notificationService, function($timeout) {
+	this.showSuccess(i_text) {
+		
+	}
+	
+	this.showError(i_text) {
+		
 	}
 });
 
