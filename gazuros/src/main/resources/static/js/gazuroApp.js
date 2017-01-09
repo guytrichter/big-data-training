@@ -103,6 +103,8 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 				order.name = projectsService.getNameForId(order.productId);
 				});
 			}
+			
+			$scope.$apply();
 		}
 	});
 	
@@ -131,7 +133,7 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 
 	// Confirmations & Prompts
 	$scope.confirmRecieve = function(i_order) {
-		if (i_order && !!i_order.info) {
+		if (i_order) {
 			$scope.itemToConfirm = i_order.name;
 			$scope.showPrompt = true;
 		}
@@ -221,6 +223,7 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 	$scope.hideNotifications = function() {
 		$scope.showSuccess = false;
 		$scope.showError = false;
+		
 	}
 	
 	$scope.showSuccessNotification = function(i_successText) {
