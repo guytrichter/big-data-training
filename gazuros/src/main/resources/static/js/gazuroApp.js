@@ -1,6 +1,6 @@
 var app = angular.module('gazuroApp', []);
-// var host = "127.0.0.1:8080";
-var host = "gazuros-app.cfapps.io";
+var host = "127.0.0.1:8080";
+// var host = "gazuros-app.cfapps.io";
 
 // Controllers
 app.controller('projectController', function($scope, $window, $location, dataService) {
