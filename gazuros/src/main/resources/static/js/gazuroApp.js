@@ -83,6 +83,11 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 		$scope.mappings = mappings;
 	});
 
+	$scope.getNameForId = function(i_productId) {
+		if ($scope.mappings[i_productId]) {
+			return $scope.mappings[i_productId];
+		}
+	}
 
 	// stubs
 	$scope.backorders = [{"id":22,"productId":42,"dateTimestamp":1483023905926,"dateStr":"2016-12-29T15:05:05.926Z","amount":5000,"status":"BACK_ORDER","shippingPrice":0.0,"packager":"NY"},{"id":32,"productId":52,"dateTimestamp":1483023926733,"dateStr":"2016-12-29T15:05:26.733Z","amount":5000,"status":"BACK_ORDER","shippingPrice":0.0,"packager":"NY"}];
@@ -100,11 +105,12 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 			
 			if ($scope.backorders && $scope.backorders.length > 0) {
 				$scope.backorders.forEach(function(order) {
-				order.name = projectsService.getNameForId(order.productId);
+					debugger;
+				order.name = $scope.getNameForId(order.productId);
 				});
 			}
 			
-			$scope.$apply();
+		//	$scope.$apply();
 		}
 	});
 	
@@ -113,6 +119,7 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 			$scope.products = response.data;	
 		}
 	});
+
 	
 
 	$scope.initMenu = function() {
@@ -193,6 +200,12 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 	$scope.submitNewProduct = function() {
 		dataService.createNewProduct($scope.order).then(function(response) {
 			$scope.order = {shippingPrice : 0.0}; // Reset order object
+			if (response.status == 200) {
+				$scope.showSuccessNotification("Order successfully created");
+			}
+			else {
+				$scope.showErrorNotification("Error creating order");
+			}
 	});
 	}
 
@@ -289,7 +302,7 @@ app.service('dataService', function($http) {
 		function(response) {
 			// Failure
 			console.log("DATASERVICE: Failed to update order %s", i_orderId);
-			return response.status;
+			return response;
 		});
 	}
 
@@ -306,7 +319,7 @@ app.service('dataService', function($http) {
 			function(response) {
 				// Failure
 				console.log("DATASERVICE: Failed to remove %s kits", i_kitName);
-				return response.status;
+				return response;
 			});
 		}
 	}
@@ -324,7 +337,7 @@ app.service('dataService', function($http) {
 			function(response) {
 				// Failure
 				console.log("DATASERVICE: Failed to remove boxes");
-				return response.status;
+				return response;
 			});
 		}
 	}
@@ -344,7 +357,7 @@ app.service('dataService', function($http) {
 			function(response) {
 				// Failure
 				console.log("DATASERVICE: Failed to create product");
-				return response.status;
+				return response;
 			});
 		}
 	}

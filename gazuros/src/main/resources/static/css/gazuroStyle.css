@@ -44,7 +44,7 @@ li {
 		
 }
 
-#gazuroPrompt .modal-content {
+#gazuroProductPrompt .modal-content {
 	width: 400px;
 }
 
@@ -101,4 +101,12 @@ top: 25%;
     font-family: TruenoLight;
     text-transform: capitalize;
     
+}
+
+#successNotification, #errorNotification {
+	position: absolute;
+	width: 100%;
+	z-index: 50000;
+	top: 0;
+	margin: 0 auto;
 }

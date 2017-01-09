@@ -20,6 +20,7 @@ import java.util.List;
 @Controller
 public class OrderController {
 
+    public static final String BACK_ORDER = "BACK_ORDER";
     @Autowired
     private OrderDao orderDao;
 
@@ -35,6 +36,7 @@ public class OrderController {
         order.setDateStr(now.toString());
 
         System.out.println("Received order: " + order);
+        order.setStatus(BACK_ORDER);
         Order fromDb = orderDao.save(order);
         System.out.println("FromDB: " + fromDb);
 

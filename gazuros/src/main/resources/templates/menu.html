@@ -22,7 +22,7 @@
       <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToInventoryPage()">View Current Inventory</button>
       <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToMenu(3)">Outgoing Kits</button>
       <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="showProductOrderForm()">Create New Order</button>
-      <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="testServer()">Test</button>
+      <!--<button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="testServer()">Test</button>-->
 
       <button ng-repeat="backorder in backorders" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_2')" ng-click="confirmRecieve(backorder)">{{backorder.amount}} {{backorder.name}}</button>
       <button ng-repeat="kit in outgoingkits" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_3')" ng-click="placeOrder(kit)">{{kit}}</button>
