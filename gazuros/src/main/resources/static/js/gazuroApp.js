@@ -134,7 +134,7 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 	// Confirmations & Prompts
 	$scope.confirmRecieve = function(i_order) {
 		if (i_order) {
-			$scope.itemToConfirm = i_order.name;
+			$scope.itemToConfirm = i_order;
 			$scope.showPrompt = true;
 		}
 	}
