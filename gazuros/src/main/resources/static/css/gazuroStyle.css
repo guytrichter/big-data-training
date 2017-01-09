@@ -44,6 +44,10 @@ li {
 		
 }
 
+#gazuroPrompt .modal-content {
+	width: 400px;
+}
+
 #gazuroPrompt .modal-dialog {
 top: 25%;
 }
