@@ -60,6 +60,21 @@ public class InventoryController {
 
         System.out.println("kitsMap: " + kits);
 
+        //insert products with no inventory as 0
+        Iterable<Product> allProducts = productDao.findAll();
+        for (Product product : allProducts) {
+
+            Inventory inventory = inventoryDao.findByProductId(product.getId());
+            if (null == inventory) {
+                inventory = new Inventory();
+                inventory.setProductId(product.getId());
+                inventory.setCount(0);
+                inventory.setLastUpdate(DateTime.now(DateTimeZone.UTC).getMillis());
+                inventory.setPackager("ny");  //default for now
+                Inventory fromDb = inventoryDao.save(inventory);
+                System.out.println("Created new inventory for: " + product.getName() + " - " + fromDb);
+            }
+        }
     }
 
     private void fillKitsStr(String kitName, String kitsStr) {

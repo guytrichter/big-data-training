@@ -2,8 +2,10 @@ package com.gazuros.inventory.controller;
 
 import com.gazuros.inventory.dao.InventoryDao;
 import com.gazuros.inventory.dao.OrderDao;
+import com.gazuros.inventory.dao.ProductDao;
 import com.gazuros.inventory.model.Inventory;
 import com.gazuros.inventory.model.Order;
+import com.gazuros.inventory.model.Product;
 import com.google.common.base.Joiner;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by guy on 12/17/16.
@@ -23,6 +27,9 @@ public class OrderController {
     public static final String BACK_ORDER = "BACK_ORDER";
     @Autowired
     private OrderDao orderDao;
+
+    @Autowired
+    private ProductDao productDao;
 
     @Autowired
     private InventoryDao inventoryDao;
@@ -112,6 +119,30 @@ public class OrderController {
         System.out.println("FromDB: " + listStr);
 
         return fromDb;
+    }
+
+    @RequestMapping(value = "/orders/getBackOrdersWithProductName", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Order> getBackOrdersWithProductName() {
+
+        System.out.println("getBackOrdersWithProductName");
+        List<Order> fromDb = orderDao.findByStatus(BACK_ORDER);
+        String listStr = Joiner.on(",").join(fromDb);
+        System.out.println("FromDB: " + listStr);
+
+        Map<String, Order> productNameToOrder = new HashMap<String, Order>();
+        for (Order order : fromDb) {
+            Product product = productDao.findOne(order.getProductId());
+            if (null == product) {
+                System.out.println("order without product???");
+                continue;
+            }
+
+            String productName = product.getName();
+            productNameToOrder.put(productName, order);
+        }
+
+        return productNameToOrder;
     }
 
     @RequestMapping(value = "/orders/getOrdersByProductId", method = RequestMethod.GET)
