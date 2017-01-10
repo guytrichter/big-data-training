@@ -93,7 +93,7 @@ app.controller('inventoryController', function($scope, $window, $location, dataS
 	}
 
 	$scope.goToMainMenu = function() {
-		var url = "menu.html";
+		var url = "";
 		$window.location.href = url;
 	}
 
