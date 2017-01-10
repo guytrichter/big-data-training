@@ -69,6 +69,7 @@ top: 25%;
 	position: absolute;
 	top: 88%;
 	right: 5px;
+	display: none;
 }
 
 .back-button {
