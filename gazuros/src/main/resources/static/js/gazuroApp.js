@@ -55,17 +55,18 @@ app.controller('inventoryController', function($scope, $window, $location, dataS
 	});
 	
 	function mapNameToProductId(i_productName) {
+		var output = null;
 		if ($scope.projects && $scope.projects.length > 0) {
 			$scope.projects.forEach(function(project) {
 				if (project && project.name == i_productName) {
-					return project.id;
+					output = project.id;
 				}
 			});
 		}
 		else {
 			console.log("Error mapping projects, projects list: ", $scope.projects);
-			return null;
 		}
+		return output;
 	}
 	
 	function formatInventoryResponse(i_responseObj) {
