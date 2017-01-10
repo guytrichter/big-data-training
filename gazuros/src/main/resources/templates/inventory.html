@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title> Gazuro - Projects </title>
+    <title> Gazuro - Projects </title><!-- 
     <script th:src="@{/js/angular.min.js}"></script>
     <script th:src="@{/js/ui-bootstrap.js}"></script>
     <script th:src="@{/js/gazuroApp.js}"></script>
 
     <link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
     <link rel="stylesheet" th:href="@{/css/gazuroStyle.css}"></link>
+	 -->
+	<script src="../static/js/angular.min.js"></script>
+<script src="../static/js/ui-bootstrap.js"></script>
+<script src="../static/js/gazuroApp.js"></script>
+<link rel="stylesheet" href="../static/css/bootstrap.css"></link>
+<link rel="stylesheet" href="../static/css/gazuroStyle.css"></link>
 </head>
 
 <body class="gradientBkgr" ng-app="gazuroApp">
 <div id="userInbox" class="mainBox" ng-controller="inventoryController">
     <div class="container">
-	<button class="col-sm-1 btn btn-xs btn-default back-button" ng-click="goToMainMenu()"> Go Back </button>
+	<button class="col-sm-1 btn btn-xs btn-default back-button" ng-click="goToMainMenu()"> Go Back </button> 
         <div class="col-sm-11 projectsTitle"> Inventory </div>
         <table class="projects table table-striped table-bordered">
             <tr class="headerRow">
@@ -23,7 +29,8 @@
             <tr class="projectRow" ng-repeat="item in currentInventory">
                 <!--         <div class="row projectRow"> -->
                 <td class="col-sm-3">{{item.name}}</td>
-                <td class="col-sm-3">{{item.amount}}</td>
+                <td class="col-sm-3" ng-dblclick="editItem(item)"><span ng-hide="isEditing">{{item.amount}}</span><input ng-model="item.amount" ng-blur="doneEditing(item)" ng-show="isEditing"></input></td>
+				
             </tr>
         </table>
     </div>

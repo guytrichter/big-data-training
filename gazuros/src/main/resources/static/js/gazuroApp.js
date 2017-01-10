@@ -16,12 +16,57 @@ app.controller('projectController', function($scope, $window, $location, dataSer
 
 app.controller('inventoryController', function($scope, $window, $location, dataService) {
 	$scope.currentInventory = [{name: "master carton", amount: 8000}];
+	$scope.projects = [];
+	
+	dataService.getAllProjects().then(function(response) {
+		if (response && response.data) {
+			$scope.projects = response.data;
+		}
+	});
+	
+	$scope.isEditing = false;
+	
+	$scope.editItem = function(i_productId) {
+		$scope.isEditing = true;
+	}
+	
+	$scope.doneEditing = function(i_product) {
+		$scope.isEditing = false;
+		var mappedId = mapNameToProductId(i_product.name);
+		
+		if (mappedId != null) {
+			dataService.updateCurrentInventory(mappedId, i_product.amount).then(function(response) {
+				console.log(response);
+				if (response.status == 200) {
+					console.log("Successfully updated");
+				}
+				else {
+					console.log("Error updating");
+				}
+			});
+		}
+		// Map name to product id and then call datserrvice to updATE
+	}
 	
 	dataService.getCurrentInventory().then(function(response) {
 		if (response && response.data) {
 			$scope.currentInventory = formatInventoryResponse(response.data);	
 		}
 	});
+	
+	function mapNameToProductId(i_productName) {
+		if ($scope.projects && $scope.projects.length > 0) {
+			$scope.projects.forEach(function(project) {
+				if (project && project.name == i_productName) {
+					return project.id;
+				}
+			});
+		}
+		else {
+			console.log("Error mapping projects, projects list: ", $scope.projects);
+			return null;
+		}
+	}
 	
 	function formatInventoryResponse(i_responseObj) {
 		var keys = Object.keys(i_responseObj);
@@ -105,7 +150,6 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 			
 			if ($scope.backorders && $scope.backorders.length > 0) {
 				$scope.backorders.forEach(function(order) {
-					debugger;
 				order.name = $scope.getNameForId(order.productId);
 				});
 			}
@@ -361,6 +405,23 @@ app.service('dataService', function($http) {
 			});
 		}
 	}
+	
+	this.updateCurrentInventory = function(i_productId, i_quantity) {
+			var link = "http://" + host + "/inventory/updateCurrentInventory/" + i_productId + "?count=" + i_quantity;
+			
+			return $http.put(link, {}).then(
+			function(response) {
+				// Success
+				console.log("DATASERVICE: Updated product %d quantity to %d", i_productId, i_quantity);
+				return response;
+			}, 
+			function(response) {
+				// Failure
+				console.log("DATASERVICE: Failed to update product %s quantity");
+				return response;
+			});
+	}
+	
 });
 
 app.service('projectsService', function($http, dataService) {
