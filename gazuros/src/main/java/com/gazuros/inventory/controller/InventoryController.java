@@ -110,6 +110,7 @@ public class InventoryController {
                 inventoryResult.productId = product.getId();
                 inventoryResult.productName = product.getName();
                 inventoryResult.count = inventory.getCount();
+                inventoryResult.requiredCountRed = product.getRequiredCountRed();
 
                 Map<String, Collection<Pair<Long, Integer>>> kitsMap = kits.asMap();
                 boolean appearedInPrev = false;
@@ -130,7 +131,7 @@ public class InventoryController {
 
                             result.add(inventoryResult);
                         } else {
-                            System.out.println("Skip product");
+//                            System.out.println("Skip product");
                         }
                     }
                 }
@@ -144,6 +145,7 @@ public class InventoryController {
     public static class InventoryResult {
         public String kitName;
         public long productId;
+        public int requiredCountRed;
         public String productName;
         public int count;
     }

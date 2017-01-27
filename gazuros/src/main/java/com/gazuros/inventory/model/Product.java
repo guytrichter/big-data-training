@@ -22,6 +22,9 @@ public class Product {
     @Column(name= "price")
     private double price;
 
+    @Column(name = "required_count_red")
+    private int requiredCountRed;
+
     @Column(name = "provider")
     private String provider;
 
@@ -69,13 +72,21 @@ public class Product {
         this.description = description;
     }
 
+    public int getRequiredCountRed() {
+        return requiredCountRed;
+    }
+
+    public void setRequiredCountRed(int requiredCountRed) {
+        this.requiredCountRed = requiredCountRed;
+    }
 
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", price=" + price +
+                ", price=" + price + '\'' +
+                ", requiredCountRed=" + requiredCountRed + '\'' +
                 ", provider='" + provider + '\'' +
                 ", description='" + description + '\'' +
                 '}';
