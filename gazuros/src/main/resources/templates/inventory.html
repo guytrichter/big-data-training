@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title> Gazuro - Projects </title> 
+    <title> Gazuro - Projects </title>
     <script th:src="@{/js/angular.min.js}"></script>
+    <script th:src="@{/js/angular-filter.js}"></script>
+
     <script th:src="@{/js/ui-bootstrap.js}"></script>
     <script th:src="@{/js/gazuroApp.js}"></script>
 
@@ -15,16 +17,14 @@
     <div class="container">
 	<button class="col-sm-1 btn btn-xs btn-default back-button" ng-click="goToMainMenu()"> Go Back </button> 
         <div class="col-sm-11 projectsTitle"> Inventory </div>
-        <table class="projects table table-striped table-bordered">
+        <table class="projects table table-striped table-bordered" ng-repeat="(key, items) in currentInventory | groupBy: 'kitName'">
             <tr class="headerRow">
-                <th class="col-sm-3 h3">Name</th>
-                <th class="col-sm-3 h3">Quantity</th>
+                <th class="col-sm-3 h3">{{key}}</th>
+                <th class="col-sm-3 h3"></th>
             </tr>
-            <tr class="projectRow" ng-repeat="item in currentInventory">
-                <!--         <div class="row projectRow"> -->
-                <td class="col-sm-3">{{item.name}}</td>
-                <td class="col-sm-3" ng-dblclick="editItem(item)"><span ng-hide="isEditing">{{item.amount}}</span><input ng-model="item.amount" ng-blur="doneEditing(item)" ng-show="isEditing"></input></td>
-				
+            <tr class="projectRow" ng-repeat="item in items">
+                <td class="col-sm-3">{{item.productName}}</td>
+                <td class="col-sm-3" ng-dblclick="editItem(item)"><span ng-hide="isEditing">{{item.count}}</span><input ng-model="item.count" ng-blur="doneEditing(item)" ng-show="isEditing"></input></td>
             </tr>
         </table>
     </div>

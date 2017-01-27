@@ -3,6 +3,8 @@
 <head>
   <title> Gazuro - Projects </title>
   <script th:src="@{/js/angular.min.js}"></script>
+  <script th:src="@{/js/angular-filter.js}"></script>
+
   <script th:src="@{/js/ui-bootstrap.js}"></script>
   <script th:src="@{/js/gazuroApp.js}"></script>
 
@@ -15,7 +17,7 @@
     <div class="col-sm-12 projectsTitle" ng-click="goToMenu(1)"> Menu </div>
     <div class="col-sm-12 promptTitle" ng-show="shouldShow('menu_1')"> What would you like to do? </div>
     <div class="col-sm-12 promptTitle" ng-show="shouldShow('menu_2')"> Which order did you receive? </div>
-    <div class="col-sm-12 promptTitle" ng-show="shouldShow('menu_3')"> Please select outgoing kits </div>
+    <div class="col-sm-12 promptTitle" ng-show="shouldShow('menu_3')"> Which kits do you want to send to Amazon? </div>
 
     <div id="menu_options" class="col-sm-12 flexc">
       <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToMenu(2)">Receive Back Orders</button>
@@ -62,11 +64,11 @@
         <div class="modal-body container">
           <form>
             <div class="form-group">
-              <label for="numBoxes">How many boxes to ship</label>
+              <label for="numBoxes">‘How many master cartons are you shipping?</label>
               <input type="number" min="0" class="form-control" id="numBoxes" ng-model="currentOrder.numberOfBoxes"> </input>
             </div>
             <div class="form-group">
-              <label for="numUnitsPerBox">How many units per box</label>
+              <label for="numUnitsPerBox">How many units per master carton</label>
               <input type="number" min="0" class="form-control" id="numUnitsPerBox" ng-model="currentOrder.unitsPerBox"></input>
             </div>
           </form>

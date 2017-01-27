@@ -38,9 +38,7 @@ public class OrderController {
     @ResponseBody
     public Long createNewOrder(@RequestBody Order order) {
 
-        DateTime now = DateTime.now(DateTimeZone.UTC);
-        order.setDateTimestamp(now.getMillis());
-        order.setDateStr(now.toString());
+        //set time here or get from client???
 
         System.out.println("Received order: " + order);
         order.setStatus(BACK_ORDER);
@@ -70,9 +68,6 @@ public class OrderController {
         Order fromDb = orderDao.findOne(orderId);
         System.out.println("FromDB: " + fromDb);
 
-        DateTime now = DateTime.now(DateTimeZone.UTC);
-        fromDb.setDateTimestamp(now.getMillis());
-        fromDb.setDateStr(now.toString());
         fromDb.setStatus(status);
         Order updatedOrderFromDb = orderDao.save(fromDb);
         System.out.println("UpdatedOrder: " + updatedOrderFromDb);

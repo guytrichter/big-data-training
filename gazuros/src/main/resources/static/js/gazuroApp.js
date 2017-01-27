@@ -1,4 +1,4 @@
-var app = angular.module('gazuroApp', []);
+var app = angular.module('gazuroApp', ['angular.filter']);
 var host = "127.0.0.1:8080";
 // var host = "gazuros-app.cfapps.io";
 
@@ -50,7 +50,7 @@ app.controller('inventoryController', function($scope, $window, $location, dataS
 	
 	dataService.getCurrentInventory().then(function(response) {
 		if (response && response.data) {
-			$scope.currentInventory = formatInventoryResponse(response.data);	
+			$scope.currentInventory = response.data;
 		}
 	});
 	
@@ -321,14 +321,26 @@ app.service('dataService', function($http) {
 	}
 	
 	this.getKitNames = function() {
-		return $http.get("http://" + host + "/inventory/getKitNames").then(function(response) {
-			return response;
-		});
+		return $http.get("http://" + host + "/inventory/getKitNames").then(
+			function(response) { // Success
+				return response;
+			},
+			function(response) {
+				// Failure
+				console.log("DATASERVICE: Failed to get current inventory");
+				return response;
+			});
 	}
 	
 	
 	this.getCurrentInventory = function() {
-		return $http.get("http://" + host + "/inventory/getCurrentInventory").then(function(response) {
+		return $http.get("http://" + host + "/inventory/getCurrentInventory").then(
+			function(response) { // Success
+			return response;
+		},
+		function(response) {
+			// Failure
+			console.log("DATASERVICE: Failed to get current inventory");
 			return response;
 		});
 	}
@@ -422,7 +434,6 @@ app.service('dataService', function($http) {
 				return response;
 			});
 	}
-	
 });
 
 app.service('projectsService', function($http, dataService) {

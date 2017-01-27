@@ -90,14 +90,14 @@ public class InventoryController {
     @RequestMapping(value = "/inventory/getKitNames", method = RequestMethod.GET)
     @ResponseBody
     public List<String> getKitNames() {
-        return Lists.newArrayList(BONSAI_KIT, HERBS_KIT, CRAZY_GARDEN);
+        return Lists.newArrayList(kits.asMap().keySet());
     }
 
     @RequestMapping(value = "/inventory/getCurrentInventory", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Integer> getCurrentInventory() {
+    public List<InventoryResult> getCurrentInventory() {
 
-        Map<String, Integer> result = new HashMap<String, Integer>();
+        List<InventoryResult> result = new ArrayList<InventoryResult>();
 
         System.out.println("getCurrentInventory");
         List<Inventory>  fromDb = (List<Inventory>) inventoryDao.findAll();
@@ -105,13 +105,47 @@ public class InventoryController {
 
         for (Inventory inventory : fromDb) {
             Product product = productDao.findOne(inventory.getProductId());
-            if (null != product)
-                result.put(product.getName(), inventory.getCount());
-            else
-                throw new RuntimeException("Can't find product with Inventory: " + inventory);
+            if (null != product) {
+                InventoryResult inventoryResult = new InventoryResult();
+                inventoryResult.productId = product.getId();
+                inventoryResult.productName = product.getName();
+                inventoryResult.count = inventory.getCount();
+
+                Map<String, Collection<Pair<Long, Integer>>> kitsMap = kits.asMap();
+                boolean appearedInPrev = false;
+                for (String kitName : kitsMap.keySet()) {
+                    Collection<Pair<Long, Integer>> values = kitsMap.get(kitName);
+                    for (Pair<Long, Integer> val : values) {
+                        long productId = val.getFirst();
+                        if (productId == inventoryResult.productId) {
+
+                            if (appearedInPrev) {
+                                inventoryResult.kitName="Not unique to any kit";
+                            } else {
+
+                                //first kit this product is found in
+                                appearedInPrev = true;
+                                inventoryResult.kitName = kitName;
+                            }
+
+                            result.add(inventoryResult);
+                        } else {
+                            System.out.println("Skip product");
+                        }
+                    }
+                }
+
+            }
         }
 
         return result;
+    }
+
+    public static class InventoryResult {
+        public String kitName;
+        public long productId;
+        public String productName;
+        public int count;
     }
 
     @RequestMapping(value = "/inventory/updateCurrentInventory/{productId}", method = RequestMethod.PUT)
