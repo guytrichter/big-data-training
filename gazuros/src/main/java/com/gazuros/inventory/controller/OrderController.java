@@ -87,7 +87,7 @@ public class OrderController {
             inventory.setCount(0);
         }
 
-        int newAmount = updatedOrderFromDb.getAmount() + inventory.getCount();
+        int newAmount = (updatedOrderFromDb.getNumBoxes() + updatedOrderFromDb.getNumItemsPerBox()) + inventory.getCount();
         inventory.setCount(newAmount);
         inventory.setLastUpdate(DateTime.now(DateTimeZone.UTC).getMillis());
         inventory.setPackager(updatedOrderFromDb.getPackager());
