@@ -1,11 +1,12 @@
 package com.gazuros.inventory.model;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-
-import javax.persistence.*;
-
 import static javax.persistence.GenerationType.IDENTITY;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by guy on 12/17/16.
@@ -28,9 +29,12 @@ public class Order {
     @Column(name = "date_str")
     private String dateStr;
 
-    @Column(name = "amount")
-    private int amount;
+    @Column(name = "num_items_per_box")
+    private int numItemsPerBox;
 
+    @Column(name = "num_boxes")
+    private int numBoxes;
+    
     @Column(name = "status")
     private String status;
 
@@ -54,14 +58,6 @@ public class Order {
 
     public void setProductId(long productId) {
         this.productId = productId;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
     }
 
     public double getShippingPrice() {
@@ -103,6 +99,22 @@ public class Order {
     public void setPackager(String packager) {
         this.packager = packager;
     }
+    
+    public int getNumBoxes() {
+		return numBoxes;
+	}
+    
+    public void setNumBoxes(int numBoxes) {
+		this.numBoxes = numBoxes;
+	}
+    
+    public int getNumItemsPerBox() {
+		return numItemsPerBox;
+	}
+    
+    public void setNumItemsPerBox(int numItemsPerBox) {
+		this.numItemsPerBox = numItemsPerBox;
+	}
 
     @Override
     public String toString() {
@@ -111,7 +123,8 @@ public class Order {
                 ", productId=" + productId +
                 ", dateTimestamp=" + dateTimestamp +
                 ", dateStr='" + dateStr + '\'' +
-                ", amount=" + amount +
+                ", numBoxes='" + numBoxes + '\'' +
+                ", numItemsPerBox='" + numItemsPerBox + '\'' +
                 ", status='" + status + '\'' +
                 ", shippingPrice=" + shippingPrice +
                 ", packager='" + packager + '\'' +
