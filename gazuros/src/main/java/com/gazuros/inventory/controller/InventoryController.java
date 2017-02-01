@@ -163,7 +163,11 @@ public class InventoryController {
 
         System.out.println("new obj: " + newObj);
 
-        return (null != newObj);
+        if (null == newObj) {
+            throw new RuntimeException("newObj is null");
+        }
+
+        return true;
     }
     
     @RequestMapping(value = "/inventory/removeNumBoxes", method = RequestMethod.PUT)

@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Column;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,14 +120,14 @@ public class OrderController {
 
     @RequestMapping(value = "/orders/getBackOrdersWithProductName", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Order> getBackOrdersWithProductName() {
+    public List<OrderResult> getBackOrdersWithProductName() {
 
         System.out.println("getBackOrdersWithProductName");
         List<Order> fromDb = orderDao.findByStatus(BACK_ORDER);
         String listStr = Joiner.on(",").join(fromDb);
         System.out.println("FromDB: " + listStr);
 
-        Map<String, Order> productNameToOrder = new HashMap<String, Order>();
+        List<OrderResult> result = new ArrayList<OrderResult>();
         for (Order order : fromDb) {
             Product product = productDao.findOne(order.getProductId());
             if (null == product) {
@@ -134,10 +136,28 @@ public class OrderController {
             }
 
             String productName = product.getName();
-            productNameToOrder.put(productName, order);
+            OrderResult orderResult = new OrderResult();
+            orderResult.orderId = order.getId();
+            orderResult.dateTimestamp = order.getDateTimestamp();
+            orderResult.dateStr = order.getDateStr();
+            orderResult.numBoxes = order.getNumBoxes();
+            orderResult.numItemsPerBox = order.getNumItemsPerBox();
+            orderResult.productName = productName;
+            orderResult.totalNumberOfItems = order.getNumItemsPerBox() * order.getNumBoxes();
+            result.add(orderResult);
         }
 
-        return productNameToOrder;
+        return result;
+    }
+
+    public static class OrderResult {
+        public long orderId;
+        public long dateTimestamp;
+        public String dateStr;
+        public int numItemsPerBox;
+        public int numBoxes;
+        public int totalNumberOfItems;
+        public String productName;
     }
 
     @RequestMapping(value = "/orders/getOrdersByProductId", method = RequestMethod.GET)
@@ -179,5 +199,6 @@ public class OrderController {
 
         return fromDb;
     }
+
 
 }
