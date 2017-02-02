@@ -97,7 +97,7 @@ public class InventoryController {
     @ResponseBody
     public List<InventoryResult> getCurrentInventory() {
 
-        List<InventoryResult> result = new ArrayList<InventoryResult>();
+        Set<InventoryResult> result = new HashSet<InventoryResult>();
 
         System.out.println("getCurrentInventory");
         List<Inventory>  fromDb = (List<Inventory>) inventoryDao.findAll();
@@ -139,7 +139,7 @@ public class InventoryController {
             }
         }
 
-        return result;
+        return new ArrayList<InventoryResult>(result);
     }
 
     public static class InventoryResult {
@@ -148,6 +148,22 @@ public class InventoryController {
         public int requiredCountRed;
         public String productName;
         public int count;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            InventoryResult that = (InventoryResult) o;
+
+            return productId == that.productId;
+
+        }
+
+        @Override
+        public int hashCode() {
+            return (int) (productId ^ (productId >>> 32));
+        }
     }
 
     @RequestMapping(value = "/inventory/updateCurrentInventory/{productId}", method = RequestMethod.PUT)
@@ -218,6 +234,10 @@ public class InventoryController {
             System.out.println("Found inventory: " + inventory + " for productId: " + productId);
 
             int newCount = inventory.getCount() - (numKitsToRemove*numItemsInKit);
+            if (newCount < 0) {
+                throw new RuntimeException("Not enough stock of product: " + productId);
+            }
+
             inventory.setCount(newCount);
             inventory.setLastUpdate(DateTime.now(DateTimeZone.UTC).getMillis());
 

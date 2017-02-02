@@ -41,6 +41,9 @@ public class OrderController {
     public Long createNewOrder(@RequestBody Order order) {
 
         //set time here or get from client???
+        if (order.getProductId() == 0L || order.getDateTimestamp() == 0) {
+            throw new RuntimeException("Invalid order");
+        }
 
         System.out.println("Received order: " + order);
         order.setStatus(BACK_ORDER);
@@ -84,7 +87,7 @@ public class OrderController {
             inventory.setCount(0);
         }
 
-        int newAmount = (updatedOrderFromDb.getNumBoxes() + updatedOrderFromDb.getNumItemsPerBox()) + inventory.getCount();
+        int newAmount = (updatedOrderFromDb.getNumBoxes() * updatedOrderFromDb.getNumItemsPerBox()) + inventory.getCount();
         inventory.setCount(newAmount);
         inventory.setLastUpdate(DateTime.now(DateTimeZone.UTC).getMillis());
         inventory.setPackager(updatedOrderFromDb.getPackager());

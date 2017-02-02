@@ -1,6 +1,6 @@
 var app = angular.module('gazuroApp', ['angular.filter']);
-var host = "127.0.0.1:8080";
-// var host = "gazuros-app.cfapps.io";
+// var host = "127.0.0.1:8080";
+var host = "gazuros-app.cfapps.io";
 
 // Controllers
 app.controller('projectController', function($scope, $window, $location, dataService) {
@@ -137,7 +137,7 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 
 	$scope.loginAdmin = function(loginObject) {
 		if (loginObject.user && loginObject.password) {
-			ss.userAdmin = (loginObject.user == 'admin' && loginObject.password == 'admin');
+			ss.userAdmin = (loginObject.user == 'admin' && loginObject.password == 'Gazuros123');
 			$scope.ia = (ss.userAdmin == 'true');
 			$scope.showAdminLoginPrompt = false;
 		}
@@ -267,7 +267,7 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 			dataService.removeKitsFromStock(i_selectedKit, totalKitsToRemove).then(function(response) {
 				console.log(response);
 				if (response.status == 200) {
-					$scope.showSuccessNotification("%d %s Kits successfully removed", totalKitsToRemove, i_selectedKit);
+					$scope.showSuccessNotification(totalKitsToRemove + i_selectedKit + " Kits successfully removed");
 				} else {
 					$scope.showErrorNotification("Error removing kits");
 				}
