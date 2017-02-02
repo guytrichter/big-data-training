@@ -24,7 +24,7 @@
             </tr>
             <tr class="projectRow" ng-repeat="item in items">
                 <td class="col-sm-3">{{item.productName}}</td>
-                <td class="col-sm-3" ng-dblclick="editItem(item)"><span ng-hide="isEditing">{{item.count}}</span><input ng-model="item.count" ng-blur="doneEditing(item)" ng-show="isEditing"></input></td>
+                <td class="col-sm-3" ng-dblclick="editItem(item)" ng-class="{'red' : isBelowThreshold(item)}" ><span ng-hide="isEditing">{{item.count}}</span><input ng-model="item.count" ng-blur="doneEditing(item)" ng-show="isEditing"></input></td>
             </tr>
         </table>
     </div>

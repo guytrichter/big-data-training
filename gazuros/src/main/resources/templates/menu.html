@@ -15,18 +15,36 @@
 <div id="dashboard" class="mainBox" ng-controller="menuController">
   <div class="container relBox">
     <div class="col-sm-12 projectsTitle" ng-click="goToMenu(1)"> Menu </div>
+    <div class="loginButton btn btn btn-warning" ng-click="showAdminLogin()"> Admin Login </div>
     <div class="col-sm-12 promptTitle" ng-show="shouldShow('menu_1')"> What would you like to do? </div>
     <div class="col-sm-12 promptTitle" ng-show="shouldShow('menu_2')"> Which order did you receive? </div>
     <div class="col-sm-12 promptTitle" ng-show="shouldShow('menu_3')"> Which kits do you want to send to Amazon? </div>
 
     <div id="menu_options" class="col-sm-12 flexc">
-      <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToMenu(2)">Receive Back Orders</button>
+      <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToMenu(3)">Send Kits To Amazon </button>
+      <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToMenu(2)">Receive Inventory</button>
       <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToInventoryPage()">View Current Inventory</button>
-      <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="goToMenu(3)">Outgoing Kits</button>
-      <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="showProductOrderForm()">Create New Order</button>
+      <button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1', true)" ng-click="showProductOrderForm()">Create New Order</button>
       <!--<button type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_1')" ng-click="testServer()">Test</button>-->
 
-      <button ng-repeat="backorder in backorders" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_2')" ng-click="confirmRecieve(backorder)">{{backorder.amount}} {{backorder.name}}</button>
+      <table id="backOrderTable" ng-show="shouldShow('menu_2')">
+      <tr class="backorderHeaders">
+      <th> Product Name </th>
+      <th> Expected Date of Arrival </th>
+      <th> Number of Boxes </th>
+      <th> Number of Units Per Box </th>
+      <th> Total Number of Units To Recieve </th>
+      <th> Confirm You Recieved Order </th>
+      </tr>
+      <tr ng-repeat="backorder in backorders | orderBy: 'dateTimestamp'"> 
+      <td ng-class="{'red' : isOrderOverDue(backorder)}"> {{backorder.name}} </td>
+      <td> {{backorder.dateStr}} </td>
+      <td> {{backorder.numBoxes}} </td>
+      <td> {{backorder.numItemsPerBox}} </td>
+      <td> {{backorder.numBoxes * backorder.numItemsPerBox}} </td>
+      <td> <button class="btn btn-md btn-warning" ng-click="confirmRecieve(backorder)"> Confirm </button> </td>
+      </tr>
+      </table>
       <button ng-repeat="kit in outgoingkits" type="button" class="btn btn-info btn-lg flexb" ng-show="shouldShow('menu_3')" ng-click="placeOrder(kit)">{{kit}}</button>
       <button type="button" class="btn btn btn-lg flexb commentButton" ng-show="shouldShow('menu_2')" ng-click="">Comments</button>
     </div>
@@ -102,17 +120,29 @@
 			        <option ng-repeat="product in products" value="{{product.id}}">{{product.name}}</option>
 			  </select>
             </div>
-            <div class="form-group">
-              <label>Amount</label>
-              <input type="number" name="amount" class="form-control" min="0" ng-model="order.amount"></input>
+              <div class="form-group">
+              <label for="numBoxes">How many master cartons?</label>
+              <input type="number" min="0" class="form-control" id="numBoxes" ng-model="order.numBoxes"> </input>
             </div>
             <div class="form-group">
+              <label for="numUnitsPerBox">How many units per master carton?</label>
+              <input type="number" min="0" class="form-control" id="numUnitsPerBox" ng-model="order.numItemsPerBox"></input>
+            </div>
+            <div class="form-group">
+              <label>Amount</label>
+              <input type="number" name="amount" class="form-control" value="{{order.numBoxes * order.numItemsPerBox}}" disabled="disabled" ng-model="order.amount"></input>
+            </div>
+             <div class="form-group">
+              <label>Arrival Date</label>
+              <input type="date" name="date" class="form-control" ng-model="order.dateStr"></input>
+            </div>
+<!--             <div class="form-group">
               <label>Status</label>
               <select ng-model="order.status">
                 <option selected="selected" selected-value="BACK_ORDER">Back Order</option>
-                <!-- <option value="IN_STOCK">In Stock</option> -->
+               <option value="IN_STOCK">In Stock</option>
               </select>
-            </div>
+            </div> -->
 <!--        <div class="form-group">
               <label>Shipping Price</label>
               <input type="number" name="shippingPrice" class="form-control" min="0" ng-model="order.shippingPrice"></input>
@@ -127,7 +157,29 @@
       </div>
     </div>
   </div>
-  
+
+<!-- Login -->
+  <div class="modal" id="loginBox" ng-show="showAdminLoginPrompt" ng-blur="hideAdminLogin()">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+        <h2 class="text-center"> Login </h2>
+        </div>
+        <div class="modal-body">
+          <form name="login" class="loginForm col-sm-offset-1 col-sm-11" ng-submit="loginAdmin(user)">
+            <label>Name </label> 
+            <input type="text" name="userName" class="form-control" ng-model="user.user"></input>
+            <label>Password </label>
+            <input type="password" name="password" class="form-control" ng-model="user.password"></input>
+            <p class="loginError" ng-show="!!errorMsg"> {{errorMsg}} </p>
+            <button class="btn cancelBtn btn-md" ng-click="hideAdminLogin()"> Cancel </button>
+            <input type="submit" class="btn loginSubmitBtn btn-md" value="Login" />
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
  <!-- Notifications  -->
 <div id="successNotification" class="alert alert-success fade" ng-show="showSuccess"> 
   <a href="#" class="close" ng-click="hideNotifications()">&times;</a>

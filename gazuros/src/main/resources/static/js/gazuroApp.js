@@ -14,28 +14,41 @@ app.controller('projectController', function($scope, $window, $location, dataSer
 
 });
 
-app.controller('inventoryController', function($scope, $window, $location, dataService) {
+app.controller('inventoryController', function($scope, $window, $location, dataService, LS) {
 	$scope.currentInventory = [{name: "master carton", amount: 8000}];
 	$scope.projects = [];
-	
+	const ss = sessionStorage;
+
 	dataService.getAllProjects().then(function(response) {
 		if (response && response.data) {
 			$scope.projects = response.data;
 		}
 	});
+
+	$scope.isBelowThreshold = function(item) {
+		return item.count < item.requiredCountRed;
+	}
 	
 	$scope.isEditing = false;
 	
 	$scope.editItem = function(i_productId) {
-		$scope.isEditing = true;
+		if (!ss.userAdmin) {
+			return;
+		} else {
+			$scope.isEditing = true;
+		}
 	}
 	
 	$scope.doneEditing = function(i_product) {
+		if (!ss.userAdmin) {
+			$scope.isEditing = false;
+			return;
+		}
+
 		$scope.isEditing = false;
-		var mappedId = mapNameToProductId(i_product.name);
 		
-		if (mappedId != null) {
-			dataService.updateCurrentInventory(mappedId, i_product.amount).then(function(response) {
+		if (i_product.productId && i_product.productId != null) {
+			dataService.updateCurrentInventory(i_product.productId, i_product.count).then(function(response) {
 				console.log(response);
 				if (response.status == 200) {
 					console.log("Successfully updated");
@@ -94,31 +107,59 @@ app.controller('inventoryController', function($scope, $window, $location, dataS
 	}
 
 	$scope.goToMainMenu = function() {
-		var url = "";
+		var url = "/";
 		$window.location.href = url;
 	}
 
 });
 
 app.controller('menuController', function($scope, $http, $window, $location, $timeout, dataService, projectsService) {
+	const ss = sessionStorage;
+	
 	$scope.showPrompt = false;
 	$scope.showOrderPrompt = false;
 	$scope.confirmShip = false;
 	$scope.showProductPrompt = false;
 	$scope.showSuccess = false;
 	$scope.showError = false;
-
+	$scope.ia = (ss.userAdmin == 'true');
 	$scope.currentMenu = "menu_1";
+	$scope.user = {};
 
 	$scope.currentOrder = {
 		numberOfBoxes : 0,
 		unitsPerBox : 0
 	};
 
+	$scope.showAdminLogin = function() {
+		$scope.showAdminLoginPrompt = true;
+	}
+
+	$scope.loginAdmin = function(loginObject) {
+		if (loginObject.user && loginObject.password) {
+			ss.userAdmin = (loginObject.user == 'admin' && loginObject.password == 'admin');
+			$scope.ia = (ss.userAdmin == 'true');
+			$scope.showAdminLoginPrompt = false;
+		}
+	}
+
+
+	$scope.hideAdminLogin = function() {
+		$scope.showAdminLoginPrompt = false;
+	}
+
+	$scope.logOut = function() {
+		delete ss.userAdmin;
+	}
+
 	$scope.testServer = function() {
 		return $http.get("http://" + host + "/products/getProducts").then(function(response) {
 			console.log(response);
 		});
+	}
+
+	$scope.isOrderOverDue = function(backorder) {
+		return Date.now() > backorder.dateTimestamp;
 	}
 
 	$scope.order = {shippingPrice : 0.0};
@@ -171,8 +212,12 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 		$scope.currentMenu = "menu_1";
 	}();
 
-	$scope.shouldShow = function(i_menuNumber) {
-		return $scope.currentMenu == i_menuNumber;
+	$scope.shouldShow = function(i_menuNumber, iad) {
+		if (iad) {
+			return (($scope.currentMenu == i_menuNumber) && ($scope.ia == true));
+		} else {
+			return $scope.currentMenu == i_menuNumber;
+		}
 	}
 
 	$scope.goToMenu = function(i_menuNumber, i_additionalParams) {
@@ -243,6 +288,9 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 	
 	// Create new product
 	$scope.submitNewProduct = function() {
+		$scope.order.dateTimestamp = Date.parse($scope.order.dateStr);
+		$scope.order.status = "BACK_ORDER";
+
 		dataService.createNewProduct($scope.order).then(function(response) {
 			$scope.order = {shippingPrice : 0.0}; // Reset order object
 			if (response.status == 200) {
@@ -418,7 +466,6 @@ app.service('dataService', function($http) {
 			});
 		}
 	}
-	
 	this.updateCurrentInventory = function(i_productId, i_quantity) {
 			var link = "http://" + host + "/inventory/updateCurrentInventory/" + i_productId + "?count=" + i_quantity;
 			
@@ -464,6 +511,21 @@ app.service('projectsService', function($http, dataService) {
 			return self.mappings[i_productId];
 		}
 	}
+});
+
+// Angular Service
+app.factory("LS", function($window) {
+
+  return {
+    setData: function(key, val) {
+      $window.localStorage.setItem(key, val);
+      return this;
+    },
+    getData: function() {
+      return $window.localStorage.getItem(key);
+    }
+  };
+
 });
 
 
