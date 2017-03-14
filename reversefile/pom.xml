@@ -13,6 +13,12 @@
     <akka.version>2.4.9</akka.version>
   </properties>
   <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.redis/scala-redis_2.10.0 -->
+    <dependency>
+      <groupId>org.redis</groupId>
+      <artifactId>scala-redis_2.10.0</artifactId>
+      <version>0.0.18</version>
+    </dependency>
     <dependency>
       <groupId>com.github.scopt</groupId>
       <artifactId>scopt_${scala.binary.version}</artifactId>
@@ -106,11 +112,6 @@
       <groupId>io.circe</groupId>
       <artifactId>circe-generic_${scala.binary.version}</artifactId>
       <version>0.5.3</version>
-    </dependency>
-    <dependency>
-      <groupId>com.recongate</groupId>
-      <artifactId>arango_${scala.binary.version}</artifactId>
-      <version>0.0.1</version>
     </dependency>
   </dependencies>
   <build>
