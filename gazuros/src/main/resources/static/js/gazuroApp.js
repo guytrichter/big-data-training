@@ -1,6 +1,6 @@
 var app = angular.module('gazuroApp', ['angular.filter']);
-// var host = "127.0.0.1:8080";
-var host = "gazuros-app.cfapps.io";
+var host = "127.0.0.1:8080";
+// var host = "gazuros-app.cfapps.io";
 
 // Controllers
 app.controller('projectController', function($scope, $window, $location, dataService) {
@@ -189,12 +189,12 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 	dataService.getBackOrders().then(function(response) {
 		if (response && response.data) {
 			$scope.backorders = response.data;
-			
-			if ($scope.backorders && $scope.backorders.length > 0) {
-				$scope.backorders.forEach(function(order) {
-				order.name = $scope.getNameForId(order.productId);
-				});
-			}
+			//
+			// if ($scope.backorders && $scope.backorders.length > 0) {
+			// 	$scope.backorders.forEach(function(order) {
+			// 	order.name = $scope.getNameForId(order.productId);
+			// 	});
+			// }
 			
 		//	$scope.$apply();
 		}

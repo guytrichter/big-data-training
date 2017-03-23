@@ -45,6 +45,8 @@ public class OrderController {
             throw new RuntimeException("Invalid order");
         }
 
+        order.setDateStr(order.getDateStr().substring(0, order.getDateStr().indexOf('T')));
+
         System.out.println("Received order: " + order);
         order.setStatus(BACK_ORDER);
         Order fromDb = orderDao.save(order);
@@ -111,14 +113,56 @@ public class OrderController {
 
     @RequestMapping(value = "/orders/getOrdersByStatus", method = RequestMethod.GET)
     @ResponseBody
-    public List<Order> getOrdersByStatus(@RequestParam String status) {
+    public List<ViewBackOrder> getOrdersByStatus(@RequestParam String status) {
 
         System.out.println("getProductByStatus for status: " + status);
-        List<Order> fromDb = orderDao.findByStatus(status);
-        String listStr = Joiner.on(",").join(fromDb);
-        System.out.println("FromDB: " + listStr);
+        List<Order> fromDb = orderDao.findByStatus("BACK_ORDER");
+        System.out.println("Collected " + fromDb.size() + " orders back order from db");
+        List<ViewBackOrder> res = new ArrayList<ViewBackOrder>();
 
-        return fromDb;
+        for (Order order :fromDb) {
+
+            Product product = productDao.findOne(order.getProductId());
+            if (null == product) {
+                System.out.println("order without product???");
+                continue;
+            }
+
+            ViewBackOrder viewBackOrder = new ViewBackOrder();
+            viewBackOrder.dateStr = order.getDateStr();
+            viewBackOrder.dateTimestamp = order.getDateTimestamp();
+            viewBackOrder.numBoxes = order.getNumBoxes();
+            viewBackOrder.numItemsPerBox = order.getNumItemsPerBox();
+            viewBackOrder.status = order.getStatus();
+            viewBackOrder.shippingPrice = order.getShippingPrice();
+            viewBackOrder.name = product.getName();
+            viewBackOrder.id = order.getId();
+
+            res.add(viewBackOrder);
+        }
+
+
+        return res;
+    }
+
+    /**
+     * Product Name	Expected Date of Arrival
+     * Number of Boxes
+     * Number of Units Per Box
+     * Total Number of Units To Recieve
+     * Confirm You Recieved Order
+     * @return
+     */
+    public class ViewBackOrder {
+        public long id;
+        public String dateStr;
+        public long dateTimestamp;
+        public int numBoxes;
+        public int numItemsPerBox;
+        public String packager;
+        public String name;
+        public double shippingPrice;
+        public String status;
     }
 
     @RequestMapping(value = "/orders/getBackOrdersWithProductName", method = RequestMethod.GET)
