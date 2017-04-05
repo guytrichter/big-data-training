@@ -4,6 +4,7 @@ import com.gazuros.inventory.dao.InventoryDao;
 import com.gazuros.inventory.dao.ProductDao;
 import com.gazuros.inventory.model.Inventory;
 import com.gazuros.inventory.model.Product;
+import com.gazuros.inventory.utils.EmailUtils;
 import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
@@ -238,33 +239,13 @@ public class InventoryController {
         return true;
     }
     
-    @RequestMapping(value = "/inventory/removeNumBoxes", method = RequestMethod.PUT)
-    @ResponseBody
-    public int removeNumBoxes(@RequestParam int numBoxesToRemove) {
-
-        System.out.println("removeNumBoxes: " + numBoxesToRemove);
-        List<Inventory>  fromDb = (List<Inventory>) inventoryDao.findAll();
-        System.out.println("FromDB: " + Joiner.on(",").join(fromDb));
-        
-        Inventory inventory = inventoryDao.findByProductId(BOX_PRODUCT_ID); //master_carton prodictId
-        System.out.println("Found inventory: " + inventory);
-
-        int newCount = inventory.getCount() - numBoxesToRemove;
-        inventory.setCount(newCount);
-        inventory.setLastUpdate(DateTime.now(DateTimeZone.UTC).getMillis());
-
-        Inventory newBox = inventoryDao.save(inventory);
-        System.out.println("new inventory: " + fromDb);
-
-        return newBox.getCount();
-    }
 
     @Transactional
     @RequestMapping(value = "/inventory/removeNumKitsFromInventory", method = RequestMethod.PUT)
     @ResponseBody
-    public int removeNumKitsFromInventory(@RequestParam String kitName, @RequestParam int numKitsToRemove) {
+    public int removeNumKitsFromInventory(@RequestParam String kitName, @RequestParam int numKitsToRemove, @RequestParam int numBoxesToRemove) {
 
-        System.out.println("removeNumBonsaiKitsFromInventory kitName: " + kitName + ", numKitsToRemove: " + numKitsToRemove);
+        System.out.println("removeNumBonsaiKitsFromInventory kitName: " + kitName + ", numKitsToRemove: " + numKitsToRemove + ", numBoxesToRemove: " + numBoxesToRemove);
 
         Collection<Pair<Long, Integer>> kitProducts = this.kits.get(kitName);
         if (kitProducts.isEmpty()) {
@@ -283,7 +264,7 @@ public class InventoryController {
                 throw new RuntimeException("Could not find product: " + productId);
             }
 
-            System.out.println("Found inventory: " + inventory + " for productId: " + productId);
+//            System.out.println("Found inventory: " + inventory + " for productId: " + productId);
 
             int newCount = inventory.getCount() - (numKitsToRemove*numItemsInKit);
             if (newCount < 0) {
@@ -297,6 +278,37 @@ public class InventoryController {
             System.out.println("new inventory: " + fromDb);
         }
 
+        int newCount = removeNumBoxes(numBoxesToRemove);
+        System.out.println("Boxes new count: " + newCount);
+
+        //send mail
+        String mailSmtpHost = "smtp.gmail.com";
+        String mailTo = "danny@gazuros.com";
+        String mailFrom = "trichter.guy@gmail.com";
+        String mailSubject = "Sent " + numKitsToRemove + " " + kitName + " kits in " + numBoxesToRemove + " boxes";
+        String mailText = "successfully sent kits";
+
+        EmailUtils.sendEmail(mailTo, null, mailFrom, mailSubject, mailText, mailSmtpHost);
+
         return -1;
+    }
+
+    private int removeNumBoxes(int numBoxesToRemove) {
+
+        System.out.println("removeNumBoxes: " + numBoxesToRemove);
+        List<Inventory>  fromDb = (List<Inventory>) inventoryDao.findAll();
+        System.out.println("FromDB: " + Joiner.on(",").join(fromDb));
+
+        Inventory inventory = inventoryDao.findByProductId(BOX_PRODUCT_ID); //master_carton prodictId
+        System.out.println("Found inventory: " + inventory);
+
+        int newCount = inventory.getCount() - numBoxesToRemove;
+        inventory.setCount(newCount);
+        inventory.setLastUpdate(DateTime.now(DateTimeZone.UTC).getMillis());
+
+        Inventory newBox = inventoryDao.save(inventory);
+        System.out.println("new inventory: " + fromDb);
+
+        return newBox.getCount();
     }
 }

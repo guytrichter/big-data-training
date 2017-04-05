@@ -264,7 +264,7 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 		
 		if (isInteger(totalKitsToRemove)) {
 			// Remove kits and boxes
-			dataService.removeKitsFromStock(i_selectedKit, totalKitsToRemove).then(function(response) {
+			dataService.removeKitsFromStock(i_selectedKit, totalKitsToRemove, boxesToRemove).then(function(response) {
 				console.log(response);
 				if (response.status == 200) {
 					$scope.showSuccessNotification(totalKitsToRemove + i_selectedKit + " Kits successfully removed");
@@ -274,15 +274,15 @@ app.controller('menuController', function($scope, $http, $window, $location, $ti
 				
 			});
 			
-			dataService.removeBoxesFromStock(boxesToRemove).then(function(response) {
-				console.log(response);
-				if (response.status == 200) {
-					$scope.showSuccessNotification("%s Boxes successfully removed", boxesToRemove);
-				}
-				else {
-					$scope.showErrorNotification("Error removing boxes");
-				}
-			});
+			// dataService.removeBoxesFromStock(boxesToRemove).then(function(response) {
+			// 	console.log(response);
+			// 	if (response.status == 200) {
+			// 		$scope.showSuccessNotification("%s Boxes successfully removed", boxesToRemove);
+			// 	}
+			// 	else {
+			// 		$scope.showErrorNotification("Error removing boxes");
+			// 	}
+			// });
 		}
 	}
 	
@@ -411,9 +411,9 @@ app.service('dataService', function($http) {
 		});
 	}
 
-	this.removeKitsFromStock = function(i_kitName, i_numberOfKitsToRemove) {
+	this.removeKitsFromStock = function(i_kitName, i_numberOfKitsToRemove, i_num_boxes) {
 		if (!!i_kitName) {
-			var link = "http://" + host + "/inventory/removeNumKitsFromInventory?kitName=" + i_kitName + "&numKitsToRemove=" + i_numberOfKitsToRemove;
+			var link = "http://" + host + "/inventory/removeNumKitsFromInventory?kitName=" + i_kitName + "&numKitsToRemove=" + i_numberOfKitsToRemove + "&numBoxesToRemove=" + i_num_boxes;
 			
 			return $http.put(link, {}).then(
 			function(response) {
