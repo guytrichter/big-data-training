@@ -11,7 +11,7 @@ import javax.mail.internet.MimeMessage;
  */
 public class EmailUtils {
 
-    private static final String HC = "h...0";  //don't put password in github!
+    private static final String HC = "Gazuros123!";  //don't put password in github!
 
     public static void sendEmail(String to, String cc, final String from, String subject, String text, String smtpHost) {
         try {

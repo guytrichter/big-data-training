@@ -284,7 +284,7 @@ public class InventoryController {
         //send mail
         String mailSmtpHost = "smtp.gmail.com";
         String mailTo = "danny@gazuros.com";
-        String mailFrom = "trichter.guy@gmail.com";
+        String mailFrom = "kits.gazuros@gmail.com";
         String mailSubject = "Sent " + numKitsToRemove + " " + kitName + " kits in " + numBoxesToRemove + " boxes";
         String mailText = "successfully sent kits";
 
