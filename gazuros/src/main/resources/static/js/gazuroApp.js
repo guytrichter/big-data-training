@@ -1,8 +1,4 @@
 var app = angular.module('gazuroApp', ['angular.filter']);
-// var host = "127.0.0.1:8080";
-
-//gardening kit url
-// var host = "gazuros-app.cfapps.io";
 
 //candle kit URL
 var host = "gazuros-app-harassed-cost.cfapps.io";
