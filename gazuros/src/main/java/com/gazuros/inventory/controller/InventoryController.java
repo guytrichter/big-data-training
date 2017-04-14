@@ -299,7 +299,7 @@ public class InventoryController {
         List<Inventory>  fromDb = (List<Inventory>) inventoryDao.findAll();
         System.out.println("FromDB: " + Joiner.on(",").join(fromDb));
 
-        Inventory inventory = inventoryDao.findByProductId(BOX_PRODUCT_ID); //master_carton prodictId
+        Inventory inventory = inventoryDao.findByProductId(BOX_PRODUCT_ID); //master_carton productId
         System.out.println("Found inventory: " + inventory);
 
         int newCount = inventory.getCount() - numBoxesToRemove;
