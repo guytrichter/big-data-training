@@ -27,7 +27,7 @@ import java.util.*;
 @Controller
 public class InventoryController {
 
-    private static final String CANDLE_KIT = "BONSAI";
+    private static final String CANDLE_KIT = "CANDLE_KIT";
 
     public static final int BOX_PRODUCT_ID = 72;
     public static final String NOT_UNIQUE_TO_ANY_KIT = "Not unique to any kit";

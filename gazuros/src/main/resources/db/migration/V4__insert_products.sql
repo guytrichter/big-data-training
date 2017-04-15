@@ -1,6 +1,7 @@
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(1, "white container",0.0,250,"pacino","white container");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(2, "light purple container",0.0,250,"pacino","light purple container");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(3, "dark purple container",0.0,250,"pacino","dark purple container");
+INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(4, "poly bag  goodies bag",0.0,1000,"amazon","polybag");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(5, "lemon blossom scent bottle",0.0,250,"lyschel","lemon blossom");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(6, "lavender scent bottle",0.0,250,"lyschel","lavendar scent bottle");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(7, "Chamomile scent bottle",0.0,250,"Lysclhe","chamomile scent bottle");
@@ -8,7 +9,7 @@ INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(9, "candle wicks + tabs",0.0,1500,"lyschel","white candle wickcontainer");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(10, "rubber band",0.0,2000,"amazon","rubber band");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(11, "craft sticks",0.0,3500,"amazon","craft sticks");
-INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(12, "poly bag  wax + goodies bag",0.0,1000,"amazon","polybag");
+INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(12, "poly bag  wax",0.0,1000,"amazon","polybag");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(13, "pouring pot",0.0,500,"shirly","pouring pot");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(14, "packaging box",0.0,500,"molly","packaging box");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(15, "instructions",0.0,500,"molly","instructions");
