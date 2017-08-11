@@ -16,3 +16,6 @@ INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(16, "glue dots",0.0,500,"lyschel","glue dots");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(72, "master carton",0.0,150,"office depot","master carton - can hold up to 24 units");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(17, "thank you slip",0.0,500,"moly","moly");
+INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(18, "sticker for wax",0.0,600,"amazon","amazon");
+INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(19, "sticker for goodies bag",0.0,600,"amazon","amazon");
+INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(72, "master carton",0.0,150,"office depot","master carton - can hold up to 24 units");
