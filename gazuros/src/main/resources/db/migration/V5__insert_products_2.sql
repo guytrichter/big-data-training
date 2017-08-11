@@ -47,6 +47,6 @@ INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(832, "heirloom salad packaging box",0.0,150,"Page seed","heirloom packaging box");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(842, "heirloom salad instructions",0.0,150,"Page seed","heirloom salad instructions");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(852, "thank you slip",0.0,500,"moly","moly");
-
+INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(862, "polybag",0.0,1000,"poly","poly");
 
 
