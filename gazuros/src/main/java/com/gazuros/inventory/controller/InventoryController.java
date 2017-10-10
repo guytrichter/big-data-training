@@ -38,6 +38,8 @@ public class InventoryController {
     private static final String MICRO_GREEN = "MICRO_GREEN";
     private static final String TOMATO = "TOMATO";
     private static final String HEIRLOOM_SALAD = "HEIRLOOM_SALAD";
+    private static final String SUCCULENT = "SUCCULENT";
+
 
     public static final int BOX_PRODUCT_ID = 72;
     public static final String NOT_UNIQUE_TO_ANY_KIT = "Not unique to any kit";
@@ -80,6 +82,9 @@ public class InventoryController {
 
     @Value("${gazuros.kit.heirloom.salad}")
     private String heirloomSaladKitStr;
+    
+    @Value("${gazuros.kit.succulent}")
+    private String succulentKitStr;
 
     private Multimap<String, Pair<Long, Integer>> kits = HashMultimap.create();
 
@@ -100,6 +105,7 @@ public class InventoryController {
         fillKitsStr(MICRO_GREEN, microGreensKitStr);
         fillKitsStr(TOMATO, tomatoKitStr);
         fillKitsStr(HEIRLOOM_SALAD, heirloomSaladKitStr);
+        fillKitsStr(SUCCULENT, succulentKitStr);
 
 
         System.out.println("kitsMap: " + kits);
