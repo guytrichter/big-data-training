@@ -1,7 +1,7 @@
-INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(1, "white container",0.0,250,"pacino","white container");
+INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(1, "light blue container",0.0,250,"pacino","white container");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(2, "light purple container",0.0,250,"pacino","light purple container");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(3, "dark purple container",0.0,250,"pacino","dark purple container");
-INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(4, "poly bag  goodies bag",0.0,1000,"amazon","polybag");
+INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(4, "crafts bag goodies bag",0.0,1000,"amazon","polybag");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(5, "lemon blossom scent bottle",0.0,250,"lyschel","lemon blossom");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(6, "lavender scent bottle",0.0,250,"lyschel","lavendar scent bottle");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(7, "Chamomile scent bottle",0.0,250,"Lysclhe","chamomile scent bottle");

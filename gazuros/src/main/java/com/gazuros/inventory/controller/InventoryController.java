@@ -216,7 +216,7 @@ public class InventoryController {
 //            System.out.println("Found inventory: " + inventory + " for productId: " + productId);
 
             int newCount = inventory.getCount() - (numKitsToRemove*numItemsInKit);
-            if (newCount < 0) {
+            if (newCount < 0 && productId != 17) {  //thank you slip
                 throw new RuntimeException("Not enough stock of product: " + productId);
             }
 
