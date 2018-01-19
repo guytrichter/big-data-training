@@ -28,6 +28,8 @@ import java.util.*;
 public class InventoryController {
 
     private static final String CANDLE_KIT = "CANDLE_KIT";
+    private static final String POURING_KIT = "POURING_KIT";
+
 
     public static final int BOX_PRODUCT_ID = 72;
     public static final String NOT_UNIQUE_TO_ANY_KIT = "Not unique to any kit";
@@ -40,6 +42,9 @@ public class InventoryController {
 
     @Value("${gazuros.kit.candle}")
     private String candleKitsStr;
+    
+    @Value("${gazuros.kit.pouring}")
+    private String pouringKit;
 
     private Multimap<String, Pair<Long, Integer>> kits = HashMultimap.create();
 
@@ -48,8 +53,8 @@ public class InventoryController {
 
         System.out.println("============ START APP ===============");
 
-        //bonsai kit
         fillKitsStr(CANDLE_KIT, candleKitsStr);
+        fillKitsStr(POURING_KIT, pouringKit);
 
         System.out.println("kitsMap: " + kits);
 
@@ -168,6 +173,7 @@ public class InventoryController {
         }
     }
 
+    //recieved inventory
     @RequestMapping(value = "/inventory/updateCurrentInventory/{productId}", method = RequestMethod.PUT)
     @ResponseBody
     public boolean updateCurrentInventory(@PathVariable long productId, @RequestParam int count) {
@@ -184,11 +190,24 @@ public class InventoryController {
         if (null == newObj) {
             throw new RuntimeException("newObj is null");
         }
+        
+        Product product = productDao.findOne(productId);
+        String productName = product.getName();
+        
+        //send mail
+        String mailSmtpHost = "smtp.gmail.com";
+        String mailTo = "danny@gazuros.com";
+        String cc = "eyal@gazuros.com";
+        String mailFrom = "kits.gazuros@gmail.com";
+        String mailSubject = "Received " + count + " of product: " + productName;
+        String mailText = "Received " + count + " of product: " + productName + " from: " + product.getProvider();
+
+        EmailUtils.sendEmail(mailTo, cc, mailFrom, mailSubject, mailText, mailSmtpHost);
 
         return true;
     }
     
-
+    //send kits to amazon
     @Transactional
     @RequestMapping(value = "/inventory/removeNumKitsFromInventory", method = RequestMethod.PUT)
     @ResponseBody
@@ -216,7 +235,7 @@ public class InventoryController {
 //            System.out.println("Found inventory: " + inventory + " for productId: " + productId);
 
             int newCount = inventory.getCount() - (numKitsToRemove*numItemsInKit);
-            if (newCount < 0 && productId != 17) {  //thank you slip
+            if (newCount < 0 && productId != 17) {  //thank you slip product id 
                 throw new RuntimeException("Not enough stock of product: " + productId);
             }
 
@@ -233,11 +252,12 @@ public class InventoryController {
         //send mail
         String mailSmtpHost = "smtp.gmail.com";
         String mailTo = "danny@gazuros.com";
+        String cc = "eyal@gazuros.com";
         String mailFrom = "kits.gazuros@gmail.com";
         String mailSubject = "Sent " + numKitsToRemove + " " + kitName + " kits in " + numBoxesToRemove + " boxes";
         String mailText = "successfully sent kits";
 
-        EmailUtils.sendEmail(mailTo, null, mailFrom, mailSubject, mailText, mailSmtpHost);
+        EmailUtils.sendEmail(mailTo, cc, mailFrom, mailSubject, mailText, mailSmtpHost);
 
         return -1;
     }
