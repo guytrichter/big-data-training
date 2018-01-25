@@ -225,6 +225,8 @@ public class InventoryController {
         }
     }
 
+    //confirm received inventory
+    @Transactional
     @RequestMapping(value = "/inventory/updateCurrentInventory/{productId}", method = RequestMethod.PUT)
     @ResponseBody
     public boolean updateCurrentInventory(@PathVariable long productId, @RequestParam int count) {
@@ -241,11 +243,12 @@ public class InventoryController {
         if (null == newObj) {
             throw new RuntimeException("newObj is null");
         }
-
+        
         return true;
     }
     
 
+    //send to amazon
     @Transactional
     @RequestMapping(value = "/inventory/removeNumKitsFromInventory", method = RequestMethod.PUT)
     @ResponseBody
@@ -273,7 +276,7 @@ public class InventoryController {
 //            System.out.println("Found inventory: " + inventory + " for productId: " + productId);
 
             int newCount = inventory.getCount() - (numKitsToRemove*numItemsInKit);
-            if (newCount < 0) {
+            if (newCount < 0 && productId != 852) {  //thank you slip
                 throw new RuntimeException("Not enough stock of product: " + productId);
             }
 
@@ -290,11 +293,12 @@ public class InventoryController {
         //send mail
         String mailSmtpHost = "smtp.gmail.com";
         String mailTo = "danny@gazuros.com";
+        String cc = "eyal@gazuros.com";
         String mailFrom = "kits.gazuros@gmail.com";
         String mailSubject = "Sent " + numKitsToRemove + " " + kitName + " kits in " + numBoxesToRemove + " boxes";
         String mailText = "successfully sent kits";
 
-        EmailUtils.sendEmail(mailTo, null, mailFrom, mailSubject, mailText, mailSmtpHost);
+        EmailUtils.sendEmail(mailTo, cc, mailFrom, mailSubject, mailText, mailSmtpHost);
 
         return -1;
     }

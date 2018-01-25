@@ -6,6 +6,7 @@ import com.gazuros.inventory.dao.ProductDao;
 import com.gazuros.inventory.model.Inventory;
 import com.gazuros.inventory.model.Order;
 import com.gazuros.inventory.model.Product;
+import com.gazuros.inventory.utils.EmailUtils;
 import com.google.common.base.Joiner;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -95,6 +96,20 @@ public class OrderController {
         inventory.setPackager(updatedOrderFromDb.getPackager());
         Inventory newInventory = inventoryDao.save(inventory);
         System.out.println("newInventory: " + newInventory);
+        
+        Product product = productDao.findOne(updatedOrderFromDb.getProductId());
+        
+        //send mail
+        String mailSmtpHost = "smtp.gmail.com";
+        String mailTo = "danny@gazuros.com";
+        String cc = "eyal@gazuros.com";
+        String mailFrom = "kits.gazuros@gmail.com";
+        String mailSubject = "Confirmed " + newAmount + " of product: " + product.getName(); 
+        String mailText = "successfully received inventory";
+
+        EmailUtils.sendEmail(mailTo, cc, mailFrom, mailSubject, mailText, mailSmtpHost);
+        
+        System.out.println("sent email");
 
         return fromDb;
     }
