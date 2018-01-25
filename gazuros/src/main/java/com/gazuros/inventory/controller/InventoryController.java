@@ -174,6 +174,7 @@ public class InventoryController {
     }
 
     //recieved inventory
+    @Transactional
     @RequestMapping(value = "/inventory/updateCurrentInventory/{productId}", method = RequestMethod.PUT)
     @ResponseBody
     public boolean updateCurrentInventory(@PathVariable long productId, @RequestParam int count) {
@@ -190,19 +191,6 @@ public class InventoryController {
         if (null == newObj) {
             throw new RuntimeException("newObj is null");
         }
-        
-        Product product = productDao.findOne(productId);
-        String productName = product.getName();
-        
-        //send mail
-        String mailSmtpHost = "smtp.gmail.com";
-        String mailTo = "danny@gazuros.com";
-        String cc = "eyal@gazuros.com";
-        String mailFrom = "kits.gazuros@gmail.com";
-        String mailSubject = "Received " + count + " of product: " + productName;
-        String mailText = "Received " + count + " of product: " + productName + " from: " + product.getProvider();
-
-        EmailUtils.sendEmail(mailTo, cc, mailFrom, mailSubject, mailText, mailSmtpHost);
 
         return true;
     }
