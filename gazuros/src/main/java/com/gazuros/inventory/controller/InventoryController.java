@@ -27,9 +27,8 @@ import java.util.*;
 @Controller
 public class InventoryController {
 
-    private static final String CANDLE_KIT = "CANDLE_KIT";
-    private static final String POURING_KIT = "POURING_KIT";
-
+    private static final int THANK_YOU_SLIP_PRODUCT_ID = 17;
+    private static final int SCRATCH_CARD_SLIP_PRODUCT_ID = 932;
 
     public static final int BOX_PRODUCT_ID = 72;
     public static final String NOT_UNIQUE_TO_ANY_KIT = "Not unique to any kit";
@@ -40,11 +39,55 @@ public class InventoryController {
     @Autowired
     private ProductDao productDao;
 
-    @Value("${gazuros.kit.candle}")
-    private String candleKitsStr;
+   
+    private static final String BONSAI_KIT = "BONSAI";	
+    private static final String HERBS_KIT = "HERBS";	
+    private static final String CRAZY_GARDEN = "CRAZY_GARDEN";		
+    private static final String EDIBLE_FLOWERS = "EDIBLE_FLOWERS";		
+    private static final String SUPER_FOODS = "SUPER_FOODS";		
+    private static final String HERBAL_TEA = "HERBAL_TEA";		
+    private static final String FRUITS = "FRUITS";		
+    private static final String PEPPER = "PEPPER";		
+    private static final String MICRO_GREEN = "MICRO_GREEN";		
+    private static final String TOMATO = "TOMATO";		
+    private static final String HEIRLOOM_SALAD = "HEIRLOOM_SALAD";		
+    private static final String SUCCULENT = "SUCCULENT";		
     
-    @Value("${gazuros.kit.pouring}")
-    private String pouringKit;
+    @Value("${gazuros.kit.bonsai}")
+    private String bonsaiKitsStr;	
+    
+    @Value("${gazuros.kit.herbs}")
+    private String herbsKitStr;
+     		   		 
+    @Value("${gazuros.kit.crazy.garden}")		
+    private String crazyGardernKitStr;		
+    	
+    @Value("${gazuros.kit.edible.flowers}")		
+    private String edibleFlowersKitStr;		
+    	
+    @Value("${gazuros.kit.super.foods}")		
+    private String superFoodsKitStr;		
+    	
+    @Value("${gazuros.kit.herbal.tea}")		
+    private String herbalTeaKitStr;		
+    	
+    @Value("${gazuros.kit.fruits}")		
+    private String fruitsKitStr;		
+    	
+    @Value("${gazuros.kit.pepper}")		
+    private String pepperKitStr;		
+    	
+    @Value("${gazuros.kit.micro.greens}")		
+    private String microGreensKitStr;		
+    	
+    @Value("${gazuros.kit.tomato}")		
+    private String tomatoKitStr;		
+    	
+    @Value("${gazuros.kit.heirloom.salad}")		
+    private String heirloomSaladKitStr;		
+    		
+    @Value("${gazuros.kit.succulent}")		
+    private String succulentKitStr;	
 
     private Multimap<String, Pair<Long, Integer>> kits = HashMultimap.create();
 
@@ -53,8 +96,19 @@ public class InventoryController {
 
         System.out.println("============ START APP ===============");
 
-        fillKitsStr(CANDLE_KIT, candleKitsStr);
-        fillKitsStr(POURING_KIT, pouringKit);
+        		
+        fillKitsStr(BONSAI_KIT, bonsaiKitsStr);		
+        fillKitsStr(HERBS_KIT, herbsKitStr);		
+        fillKitsStr(CRAZY_GARDEN, crazyGardernKitStr);		
+        fillKitsStr(EDIBLE_FLOWERS, edibleFlowersKitStr);		
+        fillKitsStr(SUPER_FOODS, superFoodsKitStr);		
+        fillKitsStr(HERBAL_TEA, herbalTeaKitStr);		
+        fillKitsStr(FRUITS, fruitsKitStr);		
+        fillKitsStr(PEPPER, pepperKitStr);		
+        fillKitsStr(MICRO_GREEN, microGreensKitStr);		
+        fillKitsStr(TOMATO, tomatoKitStr);		
+        fillKitsStr(HEIRLOOM_SALAD, heirloomSaladKitStr);		
+        fillKitsStr(SUCCULENT, succulentKitStr);
 
         System.out.println("kitsMap: " + kits);
 
@@ -223,7 +277,7 @@ public class InventoryController {
 //            System.out.println("Found inventory: " + inventory + " for productId: " + productId);
 
             int newCount = inventory.getCount() - (numKitsToRemove*numItemsInKit);
-            if (newCount < 0 && productId != 17) {  //thank you slip product id 
+            if (newCount < 0 && productId != THANK_YOU_SLIP_PRODUCT_ID && productId != SCRATCH_CARD_SLIP_PRODUCT_ID) {  //thank you slip product id 
                 throw new RuntimeException("Not enough stock of product: " + productId);
             }
 

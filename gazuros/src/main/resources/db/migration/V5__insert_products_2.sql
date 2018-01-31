@@ -53,4 +53,4 @@ INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(902, "succulent pot",0.0,2000,"succulent","succulent");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(912, "succulent seed mix packet",0.0,1000,"succulent","succulent");
 INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(922, "cactus seed mix packet",0.0,1000,"succulent","succulent");
-
+INSERT INTO product(`product_id`, `name`,`price`,`required_count_red`, `provider`,`description`) VALUES(932, "scrath card",0.0,1000,"succulent","succulent");
