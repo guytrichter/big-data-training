@@ -27,7 +27,7 @@ import java.util.*;
 @Controller
 public class InventoryController {
 
-    private static final int THANK_YOU_SLIP_PRODUCT_ID = 17;
+    private static final int THANK_YOU_SLIP_PRODUCT_ID = 852;
     private static final int SCRATCH_CARD_SLIP_PRODUCT_ID = 932;
 
     public static final int BOX_PRODUCT_ID = 72;
